@@ -90,7 +90,7 @@ function Index() {
       {projectType === "packaging" && <PackagingFlow />}
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
-      <footer className="border-t border-border px-5 py-12 md:px-10"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-8 md:flex-row"><div><p className="text-2xl font-bold tracking-[0.18em] text-primary">CRISIL</p><p className="mt-2 text-sm text-muted-foreground">Vidrio artesanal boliviano para empresas y marcas.</p></div><div className="text-sm text-muted-foreground"><p>Hecho en Bolivia</p><p className="mt-1">Proyectos corporativos y desarrollo de envases</p></div></div></footer>
+      <footer className="border-t border-border px-5 py-12 md:px-10"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-8 md:flex-row"><div><div className="flex items-center gap-3"><img src={logoAsset.url} alt="CRISIL" className="h-12 w-12 object-contain" /><p className="text-2xl font-bold tracking-[0.18em] text-primary">CRISIL</p></div><p className="mt-3 text-sm text-muted-foreground">Vidrio artesanal boliviano para empresas y marcas.</p></div><div className="text-sm text-muted-foreground"><p>Hecho en Bolivia</p><p className="mt-1">Proyectos corporativos y desarrollo de envases</p></div></div></footer>
 
       {details && <DetailModal product={details} close={() => setDetails(null)} choose={() => { chooseProduct(details); setDetails(null); }} />}
     </main>
