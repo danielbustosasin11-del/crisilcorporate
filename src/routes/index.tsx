@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, Package, PenTool, Send, Sparkles, X } from "lucide-react";
 import heroAsset from "@/assets/crisil-portada.jpg.asset.json";
+import logoAsset from "@/assets/crisil-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
-import { categories, products, type Product } from "@/lib/catalog";
+import { categories, products, packagingImage, type Product } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
