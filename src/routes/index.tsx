@@ -50,7 +50,7 @@ function Index() {
     <main className="min-h-screen overflow-x-hidden bg-background">
       <header className="absolute inset-x-0 top-0 z-30 border-b border-primary-foreground/20 text-primary-foreground">
         <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <a href="#inicio" className="text-2xl font-bold tracking-[0.18em]">CRISIL</a>
+          <a href="#inicio" className="flex items-center gap-3"><img src={logoAsset.url} alt="CRISIL" className="h-10 w-10 object-contain" /><span className="text-2xl font-bold tracking-[0.18em]">CRISIL</span></a>
           <nav className="hidden items-center gap-8 text-xs font-semibold uppercase md:flex">
             <a href="#proceso" className="hover:opacity-70">Cómo funciona</a><a href="#proyecto" className="hover:opacity-70">Regalos corporativos</a><a href="#proyecto" className="hover:opacity-70">Vidrio para tu marca</a>
           </nav>
