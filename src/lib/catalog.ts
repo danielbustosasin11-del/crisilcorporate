@@ -1,7 +1,7 @@
-import decantadorAsset from "@/assets/decantador.png.asset.json";
-import fernetAsset from "@/assets/vaso-fernet.png.asset.json";
-import setBarAsset from "@/assets/set-bar-whisky.png.asset.json";
-import modelosAsset from "@/assets/modelos-vidrio.png.asset.json";
+import decantadorAsset from "@/assets/decantador.jpg.asset.json";
+import fernetAsset from "@/assets/vaso-fernet.jpg.asset.json";
+import setBarAsset from "@/assets/set-bar-whisky.jpg.asset.json";
+import modelosAsset from "@/assets/modelos-vidrio.jpg.asset.json";
 
 export type Product = {
   id: string;
