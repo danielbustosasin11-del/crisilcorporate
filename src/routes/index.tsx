@@ -101,7 +101,7 @@ function SolutionCard({ index, title, text, action, onClick }: { index:string; t
   return <article className="group bg-primary p-7 transition-colors hover:bg-navy-soft md:min-h-[390px] md:p-10"><div className="flex h-full flex-col"><span className="text-xs text-secondary">{index}</span><div className="fine-grid my-12 flex min-h-32 items-center justify-center border border-primary-foreground/15"><Sparkles size={42} strokeWidth={1} className="text-secondary" /></div><h3 className="display text-4xl">{title}</h3><p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p><Button variant="ghost" className="mt-8 w-fit px-0 text-primary-foreground hover:bg-transparent" onClick={onClick}>{action}<ArrowRight size={16}/></Button></div></article>;
 }
 
-function ImagePlaceholder({ label, image }: { label: string; image?: string }) {
+function ImagePlaceholder({ label, image }: { label: string; image?: string | undefined }) {
   if (image) return <img src={image} alt={label} className="h-full min-h-56 w-full bg-card object-contain" />;
   return <div className="fine-grid flex h-full min-h-56 w-full items-center justify-center bg-muted"><div className="text-center"><Sparkles className="mx-auto mb-3 text-primary/50" strokeWidth={1}/><p className="text-[10px] font-bold uppercase text-muted-foreground">Fotografía pendiente</p><p className="display mt-1 text-xl text-primary">{label}</p></div></div>;
 }
