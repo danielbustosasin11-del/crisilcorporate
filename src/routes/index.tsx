@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, Package, PenTool, Send, Sparkles, X } from "lucide-react";
 import heroAsset from "@/assets/crisil-portada.jpg.asset.json";
 import logoAsset from "@/assets/crisil-logo.png.asset.json";
+import giftsPathAsset from "@/assets/camino-regalos.jpg.asset.json";
+import packagingPathAsset from "@/assets/camino-envases.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { categories, products, packagingImage, type Product } from "@/lib/catalog";
 
@@ -23,7 +25,7 @@ export const Route = createFileRoute("/")({
 type ProjectType = "gifts" | "packaging" | null;
 type FormState = { quantity: string; customization: string; packaging: string; date: string; name: string; company: string; role: string; whatsapp: string; email: string; occasion: string; notes: string };
 const initialForm: FormState = { quantity: "", customization: "", packaging: "", date: "", name: "", company: "", role: "", whatsapp: "", email: "", occasion: "", notes: "" };
-const WHATSAPP_NUMBER = "";
+const WHATSAPP_NUMBER = "59169218942";
 
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,7 +40,9 @@ function Index() {
   const update = (key: keyof FormState, value: string) => setForm((current) => ({ ...current, [key]: value }));
   const begin = (type: ProjectType) => {
     setProjectType(type);
-    window.setTimeout(() => document.querySelector("#proyecto")?.scrollIntoView({ behavior: "smooth" }), 30);
+    setMenuOpen(false);
+    const target = type === "gifts" ? "#regalos" : type === "packaging" ? "#envases" : "#proyecto";
+    window.setTimeout(() => document.querySelector(target)?.scrollIntoView({ behavior: "smooth" }), 60);
   };
   const chooseProduct = (product: Product) => {
     setSelected(product);
@@ -52,12 +56,12 @@ function Index() {
         <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#inicio" className="flex items-center gap-3"><img src={logoAsset.url} alt="CRISIL" className="h-10 w-10 object-contain" /><span className="text-2xl font-bold tracking-[0.18em]">CRISIL</span></a>
           <nav className="hidden items-center gap-8 text-xs font-semibold uppercase md:flex">
-            <a href="#proceso" className="hover:opacity-70">Cómo funciona</a><a href="#proyecto" className="hover:opacity-70">Regalos corporativos</a><a href="#proyecto" className="hover:opacity-70">Vidrio para tu marca</a>
+            <a href="#proceso" className="hover:opacity-70">Cómo funciona</a><button type="button" onClick={() => begin("gifts")} className="uppercase hover:opacity-70">Regalos corporativos</button><button type="button" onClick={() => begin("packaging")} className="uppercase hover:opacity-70">Vidrio para tu marca</button>
           </nav>
           <Button className="hidden md:inline-flex" onClick={() => begin(null)}>Iniciar mi proyecto <ArrowRight size={15} /></Button>
           <Button variant="ghost" className="h-11 w-11 px-0 text-primary-foreground md:hidden" aria-label="Abrir menú" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
         </div>
-        {menuOpen && <nav className="border-t border-primary-foreground/20 bg-primary px-5 py-6 md:hidden"><div className="flex flex-col gap-5 text-sm font-semibold uppercase"><a href="#proceso" onClick={() => setMenuOpen(false)}>Cómo funciona</a><a href="#proyecto" onClick={() => setMenuOpen(false)}>Regalos corporativos</a><a href="#proyecto" onClick={() => setMenuOpen(false)}>Vidrio para tu marca</a></div></nav>}
+        {menuOpen && <nav className="border-t border-primary-foreground/20 bg-primary px-5 py-6 md:hidden"><div className="flex flex-col gap-5 text-sm font-semibold uppercase"><a href="#proceso" onClick={() => setMenuOpen(false)}>Cómo funciona</a><button type="button" className="text-left uppercase" onClick={() => begin("gifts")}>Regalos corporativos</button><button type="button" className="text-left uppercase" onClick={() => begin("packaging")}>Vidrio para tu marca</button></div></nav>}
       </header>
 
       <section id="inicio" className="relative flex min-h-[92vh] items-end bg-primary text-primary-foreground">
@@ -80,8 +84,8 @@ function Index() {
       <section id="proyecto" className="bg-primary px-5 py-20 text-primary-foreground md:px-10 md:py-28">
         <div className="mx-auto max-w-[1320px]"><p className="mb-3 text-xs font-bold uppercase text-secondary">Comencemos</p><h2 className="display max-w-3xl text-5xl leading-none md:text-6xl">¿Qué estás buscando crear?</h2><p className="mt-5 text-primary-foreground/65">Elige el camino que mejor describe tu proyecto.</p>
           <div className="mt-12 grid gap-px bg-primary-foreground/20 md:grid-cols-2">
-            <SolutionCard index="01" title="Regalos corporativos" text="Crea un regalo personalizado para tus clientes, colaboradores, invitados o VIPs." action="Crear un regalo corporativo" onClick={() => begin("gifts")} />
-            <SolutionCard index="02" title="Vidrio para tu marca" text="Desarrolla botellas, frascos y empaques de vidrio personalizados para tu producto." action="Explorar envases de vidrio" onClick={() => begin("packaging")} />
+            <SolutionCard index="01" title="Regalos corporativos" text="Crea un regalo personalizado para tus clientes, colaboradores, invitados o VIPs." image={giftsPathAsset.url} action="Crear un regalo corporativo" onClick={() => begin("gifts")} />
+            <SolutionCard index="02" title="Vidrio para tu marca" text="Desarrolla botellas, frascos y empaques de vidrio personalizados para tu producto." image={packagingPathAsset.url} action="Explorar envases de vidrio" onClick={() => begin("packaging")} />
           </div>
         </div>
       </section>
@@ -97,8 +101,8 @@ function Index() {
   );
 }
 
-function SolutionCard({ index, title, text, action, onClick }: { index:string; title:string; text:string; action:string; onClick:()=>void }) {
-  return <article className="group bg-primary p-7 transition-colors hover:bg-navy-soft md:min-h-[390px] md:p-10"><div className="flex h-full flex-col"><span className="text-xs text-secondary">{index}</span><div className="fine-grid my-12 flex min-h-32 items-center justify-center border border-primary-foreground/15"><Sparkles size={42} strokeWidth={1} className="text-secondary" /></div><h3 className="display text-4xl">{title}</h3><p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p><Button variant="ghost" className="mt-8 w-fit px-0 text-primary-foreground hover:bg-transparent" onClick={onClick}>{action}<ArrowRight size={16}/></Button></div></article>;
+function SolutionCard({ index, title, text, action, image, onClick }: { index:string; title:string; text:string; action:string; image:string; onClick:()=>void }) {
+  return <button type="button" onClick={onClick} className="group flex w-full min-w-0 flex-col bg-primary p-5 text-left transition-colors hover:bg-navy-soft sm:p-7 md:p-10"><span className="text-xs text-secondary">{index}</span><div className="my-6 aspect-[4/3] w-full overflow-hidden border border-primary-foreground/15 md:my-8"><img src={image} alt={title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /></div><h3 className="display text-3xl sm:text-4xl">{title}</h3><p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">{action}<ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1"/></span></button>;
 }
 
 function ImagePlaceholder({ label, image }: { label: string; image?: string | undefined }) {
@@ -107,13 +111,13 @@ function ImagePlaceholder({ label, image }: { label: string; image?: string | un
 }
 
 function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails }: { category:string; setCategory:(v:string)=>void; products:Product[]; chooseProduct:(p:Product)=>void; viewDetails:(p:Product)=>void }) {
-  return <section className="px-5 py-20 md:px-10 md:py-28"><div className="mx-auto max-w-[1320px]"><p className="mb-3 text-xs font-bold uppercase text-primary">Regalos corporativos</p><h2 className="display text-5xl leading-none md:text-6xl">¿Qué tipo de regalo quieres crear?</h2><p className="mt-5 max-w-2xl text-muted-foreground">Elige una categoría para comenzar. Luego podrás definir producto, cantidad, personalización y empaque.</p>
+  return <section id="regalos" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28"><div className="mx-auto max-w-[1320px]"><p className="mb-3 text-xs font-bold uppercase text-primary">Regalos corporativos</p><h2 className="display text-5xl leading-none md:text-6xl">¿Qué tipo de regalo quieres crear?</h2><p className="mt-5 max-w-2xl text-muted-foreground">Elige una categoría para comenzar. Luego podrás definir producto, cantidad, personalización y empaque.</p>
     <div className="mt-10 flex gap-2 overflow-x-auto pb-3">{categories.map((item) => <Button key={item.id} variant={category === item.id ? "primary" : "outline"} className="shrink-0" onClick={() => setCategory(item.id)}>{item.name}</Button>)}</div>
     <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{products.length ? products.map((product) => <article key={product.id} className="group border border-border bg-card"><div className="aspect-[4/3] overflow-hidden"><ImagePlaceholder label={product.name} image={product.image}/></div><div className="p-6"><div className="flex justify-between gap-4"><h3 className="display text-3xl">{product.name}</h3><span className="h-fit bg-secondary/40 px-2 py-1 text-[10px] font-bold uppercase text-primary">Mín. 25</span></div><p className="mt-3 min-h-16 text-sm leading-6 text-muted-foreground">{product.description}</p><div className="mt-6 flex items-center justify-between"><Button onClick={() => chooseProduct(product)}>Elegir <ArrowRight size={14}/></Button><Button variant="ghost" onClick={() => viewDetails(product)}>Ver detalle</Button></div></div></article>) : <div className="col-span-full border border-border bg-card p-10 text-center"><h3 className="display text-3xl">Selección en preparación</h3><p className="mt-2 text-sm text-muted-foreground">Estamos preparando las piezas y fotografías de esta categoría.</p></div>}</div>
   </div></section>;
 }
 
-function PackagingFlow() { return <section className="px-5 py-20 md:px-10 md:py-28"><div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-2"><div><p className="mb-3 text-xs font-bold uppercase text-primary">Vidrio para tu marca</p><h2 className="display text-5xl leading-none md:text-6xl">Envases diseñados alrededor de tu producto.</h2><p className="mt-6 max-w-xl leading-7 text-muted-foreground">Desarrollamos botellas, frascos y soluciones especiales para bebidas, alimentos, cosmética y productos de autor.</p><div className="mt-8 flex flex-wrap gap-2">{["Botellas", "Frascos", "Envases especiales", "Personalización", "Desarrollo de producto"].map(x => <span key={x} className="border border-border bg-card px-4 py-2 text-xs font-semibold">{x}</span>)}</div><Button className="mt-10" onClick={() => document.querySelector("#consulta-envases")?.scrollIntoView({behavior:"smooth"})}>Solicitar propuesta <ArrowRight size={15}/></Button></div><div className="min-h-96"><ImagePlaceholder label="Botellas y frascos CRISIL" image={packagingImage}/></div></div><PackagingForm /></section>; }
+function PackagingFlow() { return <section id="envases" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28"><div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-2"><div><p className="mb-3 text-xs font-bold uppercase text-primary">Vidrio para tu marca</p><h2 className="display text-5xl leading-none md:text-6xl">Envases diseñados alrededor de tu producto.</h2><p className="mt-6 max-w-xl leading-7 text-muted-foreground">Desarrollamos botellas, frascos y soluciones especiales para bebidas, alimentos, cosmética y productos de autor.</p><div className="mt-8 flex flex-wrap gap-2">{["Botellas", "Frascos", "Envases especiales", "Personalización", "Desarrollo de producto"].map(x => <span key={x} className="border border-border bg-card px-4 py-2 text-xs font-semibold">{x}</span>)}</div><Button className="mt-10" onClick={() => document.querySelector("#consulta-envases")?.scrollIntoView({behavior:"smooth"})}>Solicitar propuesta <ArrowRight size={15}/></Button></div><div className="min-h-96"><ImagePlaceholder label="Botellas y frascos CRISIL" image={packagingImage}/></div></div><PackagingForm /></section>; }
 
 function PackagingForm() { return <div id="consulta-envases" className="mx-auto mt-20 max-w-[1320px] border-t border-border pt-14"><h3 className="display text-4xl">Cuéntanos sobre tu envase</h3><div className="mt-8 grid gap-5 md:grid-cols-2">{["Tipo de producto", "Cantidad estimada", "Botella o frasco deseado", "Personalización", "Fecha objetivo", "Nombre y empresa"].map((label) => <label key={label} className="text-xs font-bold uppercase text-muted-foreground">{label}<input className="mt-2 h-12 w-full border border-input bg-card px-4 text-base font-normal text-foreground outline-none focus:border-primary" /></label>)}</div><Button className="mt-7">Preparar consulta <ArrowRight size={15}/></Button></div>; }
 
