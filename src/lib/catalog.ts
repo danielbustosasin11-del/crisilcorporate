@@ -4,6 +4,10 @@ import setBarAsset from "@/assets/set-bar-whisky.jpg.asset.json";
 import modelosAsset from "@/assets/modelos-vidrio.jpg.asset.json";
 import mateAsset from "@/assets/mate.png.asset.json";
 import floreroAsset from "@/assets/florero-fn.jpg.asset.json";
+import vkgAsset from "@/assets/copa-vkg.jpg.asset.json";
+import ch11Asset from "@/assets/copa-ch11.jpg.asset.json";
+import bvAsset from "@/assets/copa-bv.jpg.asset.json";
+import cf2Asset from "@/assets/copa-cf2.jpg.asset.json";
 
 export type Product = {
   id: string;
