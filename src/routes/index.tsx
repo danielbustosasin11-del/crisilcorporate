@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, Package, PenTool, Send, Sparkles, X } from "lucide-react";
-import heroAsset from "@/assets/crisil-portada.jpg.asset.json";
-import logoAsset from "@/assets/crisil-logo.png.asset.json";
-import giftsPathAsset from "@/assets/camino-regalos.jpg.asset.json";
-import packagingPathAsset from "@/assets/camino-envases.jpg.asset.json";
+const heroAsset = { url: "/images/portada-corporativos.jpg" };
+const logoAsset = { url: "/images/logo-crisil.png" };
+const giftsPathAsset = { url: "/images/regalos-fernetera.jpg" };
+const packagingPathAsset = { url: "/images/envases-marca.png" };
 import { Button } from "@/components/ui/button";
+import { ProcessScroll } from "@/components/ProcessScroll";
+import { TrackOrder } from "@/components/TrackOrder";
 import { categories, products, packagingImage, type Product } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
@@ -51,7 +53,7 @@ function Index() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-background">
+    <main className="min-h-screen overflow-x-clip bg-background">
       <header className="absolute inset-x-0 top-0 z-30 border-b border-primary-foreground/20 text-primary-foreground">
         <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#inicio" className="flex items-center gap-3"><img src={logoAsset.url} alt="CRISIL" className="h-10 w-10 object-contain" /><span className="text-2xl font-bold tracking-[0.18em]">CRISIL</span></a>
@@ -73,19 +75,13 @@ function Index() {
         </div>
       </section>
 
-      <section id="proceso" className="px-5 py-20 md:px-10 md:py-28">
-        <div className="mx-auto max-w-[1320px]"><div className="mb-14 grid gap-6 md:grid-cols-2"><div><p className="mb-3 text-xs font-bold uppercase text-primary">Una idea, hecha en vidrio</p><h2 className="display text-5xl leading-none md:text-6xl">Así creamos tu proyecto</h2></div><p className="max-w-md self-end text-muted-foreground">Un proceso acompañado de principio a fin, pensado para que elegir sea simple y el resultado sea verdaderamente propio.</p></div>
-          <div className="relative grid border-y border-border md:grid-cols-4">
-            {[{ n:"01", t:"Elige", d:"Elige qué quieres regalar.", icon: Sparkles }, { n:"02", t:"Personaliza", d:"Añade tu marca y define la presentación.", icon: PenTool }, { n:"03", t:"Creamos tu propuesta", d:"Cuéntanos cantidad, ocasión y requisitos.", icon: Package }, { n:"04", t:"Recibe", d:"Tus regalos, listos para representar tu marca.", icon: Check }].map(({n,t,d,icon:Icon}) => <article key={n} className="group min-h-64 border-b border-border p-7 last:border-0 md:border-b-0 md:border-r"><div className="mb-14 flex items-start justify-between"><span className="text-xs font-bold text-primary">{n}</span><Icon className="text-primary transition-transform group-hover:-translate-y-1" size={25} strokeWidth={1.4}/></div><h3 className="display mb-2 text-3xl">{t}</h3><p className="text-sm leading-6 text-muted-foreground">{d}</p></article>)}
-          </div><div className="mt-7 inline-flex items-center gap-2 border border-secondary bg-secondary/35 px-4 py-2 text-xs font-semibold text-primary"><Check size={14}/> Pedido corporativo mínimo: 25 unidades</div>
-        </div>
-      </section>
+      <ProcessScroll />
 
       <section id="proyecto" className="bg-primary px-5 py-20 text-primary-foreground md:px-10 md:py-28">
         <div className="mx-auto max-w-[1320px]"><p className="mb-3 text-xs font-bold uppercase text-secondary">Comencemos</p><h2 className="display max-w-3xl text-5xl leading-none md:text-6xl">¿Qué estás buscando crear?</h2><p className="mt-5 text-primary-foreground/65">Elige el camino que mejor describe tu proyecto.</p>
           <div className="mt-12 grid gap-px bg-primary-foreground/20 md:grid-cols-2">
-            <SolutionCard index="01" title="Regalos corporativos" text="Crea un regalo personalizado para tus clientes, colaboradores, invitados o VIPs." image={giftsPathAsset.url} action="Crear un regalo corporativo" onClick={() => begin("gifts")} />
-            <SolutionCard index="02" title="Vidrio para tu marca" text="Desarrolla botellas, frascos y empaques de vidrio personalizados para tu producto." image={packagingPathAsset.url} action="Explorar envases de vidrio" onClick={() => begin("packaging")} />
+            <SolutionCard index="01" title="Regalos corporativos" text="Crea un regalo personalizado para tus clientes, colaboradores, invitados o VIPs." image={giftsPathAsset.url} imageClassName="object-bottom" action="Crear un regalo corporativo" onClick={() => begin("gifts")} />
+            <SolutionCard index="02" title="Vidrio para tu marca" text="Desarrolla botellas, frascos y empaques de vidrio personalizados para tu producto." image={packagingPathAsset.url} imageClassName="object-center" action="Explorar envases de vidrio" onClick={() => begin("packaging")} />
           </div>
         </div>
       </section>
@@ -94,19 +90,22 @@ function Index() {
       {projectType === "packaging" && <PackagingFlow />}
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
+      <TrackOrder />
+
       <footer className="border-t border-border px-5 py-12 md:px-10"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-8 md:flex-row"><div><div className="flex items-center gap-3"><img src={logoAsset.url} alt="CRISIL" className="h-12 w-12 object-contain" /><p className="text-2xl font-bold tracking-[0.18em] text-primary">CRISIL</p></div><p className="mt-3 text-sm text-muted-foreground">Vidrio artesanal boliviano para empresas y marcas.</p></div><div className="text-sm text-muted-foreground"><p>Hecho en Bolivia</p><p className="mt-1">Proyectos corporativos y desarrollo de envases</p></div></div></footer>
 
       {details && <DetailModal product={details} close={() => setDetails(null)} choose={() => { chooseProduct(details); setDetails(null); }} />}
     </main>
+
   );
 }
 
-function SolutionCard({ index, title, text, action, image, onClick }: { index:string; title:string; text:string; action:string; image:string; onClick:()=>void }) {
-  return <button type="button" onClick={onClick} className="group flex w-full min-w-0 flex-col bg-primary p-5 text-left transition-colors hover:bg-navy-soft sm:p-7 md:p-10"><span className="text-xs text-secondary">{index}</span><div className="my-6 aspect-[4/3] w-full overflow-hidden border border-primary-foreground/15 md:my-8"><img src={image} alt={title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /></div><h3 className="display text-3xl sm:text-4xl">{title}</h3><p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">{action}<ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1"/></span></button>;
+function SolutionCard({ index, title, text, action, image, imageClassName = "object-center", onClick }: { index:string; title:string; text:string; action:string; image:string; imageClassName?:string; onClick:()=>void }) {
+  return <button type="button" onClick={onClick} className="group flex w-full min-w-0 flex-col bg-primary p-5 text-left transition-colors hover:bg-navy-soft sm:p-7 md:p-10"><span className="text-xs text-secondary">{index}</span><div className="my-6 aspect-[4/3] w-full overflow-hidden border border-primary-foreground/15 md:my-8"><img src={image} alt={title} loading="lazy" className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${imageClassName}`} /></div><h3 className="display text-3xl sm:text-4xl">{title}</h3><p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">{action}<ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1"/></span></button>;
 }
 
 function ImagePlaceholder({ label, image }: { label: string; image?: string | undefined }) {
-  if (image) return <img src={image} alt={label} className="h-full min-h-56 w-full bg-card object-contain" />;
+  if (image) return <img src={image} alt={label} className="h-full w-full bg-card object-contain p-2 transition-transform duration-500 group-hover:scale-105" />;
   return <div className="fine-grid flex h-full min-h-56 w-full items-center justify-center bg-muted"><div className="text-center"><Sparkles className="mx-auto mb-3 text-primary/50" strokeWidth={1}/><p className="text-[10px] font-bold uppercase text-muted-foreground">Fotografía pendiente</p><p className="display mt-1 text-xl text-primary">{label}</p></div></div>;
 }
 
