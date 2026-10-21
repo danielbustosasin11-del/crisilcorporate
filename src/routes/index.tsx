@@ -142,7 +142,7 @@ function JarCard({ jar, chooseProduct, viewDetails }: { jar: Product; chooseProd
     <article className="group flex flex-col border border-border bg-card overflow-hidden">
       {/* Slider / Carrusel de Imágenes */}
       <div
-        className="relative aspect-[4/3] w-full overflow-hidden bg-card select-none touch-pan-y"
+        className="relative aspect-[3/4] w-full overflow-hidden bg-white select-none touch-pan-y"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -171,7 +171,7 @@ function JarCard({ jar, chooseProduct, viewDetails }: { jar: Product; chooseProd
               src={jar.filledImage}
               alt={`${jar.name} con contenido`}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover object-center"
             />
           </div>
         )}
@@ -241,29 +241,10 @@ function JarCard({ jar, chooseProduct, viewDetails }: { jar: Product; chooseProd
           </div>
 
           <h4 className="display text-2xl md:text-3xl text-primary">{jar.name}</h4>
-          <p className="mt-2 text-xs leading-5 text-muted-foreground">{jar.description}</p>
-
-          {/* Ficha técnica de medidas */}
-          <div className="mt-4 space-y-1 rounded bg-muted/40 p-3 text-xs">
-            {jar.specifications?.map((spec, i) => (
-              <div key={i} className="flex justify-between text-muted-foreground">
-                <span className="font-medium text-foreground">{spec.split(':')[0]}:</span>
-                <span>{spec.split(':')[1]?.trim() || spec}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Pie de página con recomendación de uso */}
-          {jar.footerNote && (
-            <div className="mt-4 border-l-2 border-primary/50 pl-3 py-1 bg-secondary/15 rounded-r">
-              <p className="text-[11px] font-medium leading-relaxed text-foreground/85">
-                <strong className="text-primary font-semibold">Aplicación sugerida:</strong> {jar.footerNote}
-              </p>
-            </div>
-          )}
+          {/* Medidas, descripción y aplicación sugerida: solo en el modal de "Detalle" */}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-border">
+        <div className="mt-4 flex items-center justify-between gap-3 pt-4 border-t border-border">
           <Button onClick={() => chooseProduct(jar)} className="flex-1">
             Cotizar envase <ArrowRight size={14}/>
           </Button>

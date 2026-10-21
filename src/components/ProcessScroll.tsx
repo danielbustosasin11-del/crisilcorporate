@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, PenTool, Package, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 const steps = [
-  { n: "01", t: "Elige", d: "Elige qué quieres regalar.", icon: Sparkles, img: "/images/pasos/01-elige.webp", pos: "object-right" },
-  { n: "02", t: "Personaliza", d: "Añade tu marca y define la presentación.", icon: PenTool, img: "/images/pasos/02-personaliza.webp", pos: "object-[75%_50%]" },
-  { n: "03", t: "Creamos tu propuesta", d: "Cuéntanos cantidad, ocasión y requisitos.", icon: Package, img: "/images/pasos/03-propuesta.webp", pos: "object-center" },
-  { n: "04", t: "Recibe", d: "Tus regalos, listos para representar tu marca.", icon: Check, img: "/images/pasos/04-recibe.webp", pos: "object-[90%_10%]" },
+  { t: "Elige tu producto", d: "Explora el catálogo y selecciona las piezas que quieres regalar o personalizar.", img: "/images/pasos/01-elige.webp", pos: "object-right" },
+  { t: "Personaliza con tu marca", d: "Agrega tu logo o un mensaje y define cómo quieres presentarlo: caja, empaque y detalles.", img: "/images/pasos/02-personaliza.webp", pos: "object-[75%_50%]" },
+  { t: "Recibe tu propuesta", d: "Cuéntanos cantidad, fecha y ocasión, y te enviamos una propuesta con precio y plazo de entrega.", img: "/images/pasos/03-propuesta.webp", pos: "object-center" },
+  { t: "Recibe tu pedido", d: "Producimos, empacamos y entregamos tus piezas, y puedes seguir tu pedido con tu código.", img: "/images/pasos/04-recibe.webp", pos: "object-[90%_10%]" },
 ];
 
 export function ProcessScroll() {
@@ -44,7 +44,7 @@ export function ProcessScroll() {
           <div className="sticky top-3 z-10 h-[42svh] overflow-hidden bg-secondary/40 md:order-2 md:top-10 md:h-[75vh]">
             {steps.map((s, i) => (
               <img
-                key={s.n}
+                key={s.t}
                 src={s.img}
                 alt={s.t}
                 loading={i === 0 ? "eager" : "lazy"}
@@ -66,23 +66,19 @@ export function ProcessScroll() {
           </div>
 
           <div className="md:order-1">
-            {steps.map(({ n, t, d, icon: Icon }, i) => (
+            {steps.map(({ t, d }, i) => (
               <article
-                key={n}
+                key={t}
                 data-i={i}
                 ref={(el) => {
                   refs.current[i] = el;
                 }}
-                className={`flex min-h-[60svh] flex-col justify-center border-b border-border py-10 transition-all duration-500 last:border-0 md:min-h-[75vh] ${
+                className={`flex min-h-[60svh] flex-col items-center justify-center border-b border-border px-2 py-10 text-center transition-all duration-500 last:border-0 md:min-h-[75vh] ${
                   i === active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-30"
                 }`}
               >
-                <div className="mb-8 flex items-start justify-between md:max-w-md">
-                  <span className="text-xs font-bold text-primary">{n}</span>
-                  <Icon className="text-primary" size={25} strokeWidth={1.4} />
-                </div>
-                <h3 className="display mb-2 text-4xl md:text-5xl">{t}</h3>
-                <p className="text-base leading-7 text-muted-foreground md:max-w-md">{d}</p>
+                <h3 className="display mb-4 text-4xl md:text-5xl">{t}</h3>
+                <p className="mx-auto max-w-sm text-lg leading-8 text-muted-foreground">{d}</p>
               </article>
             ))}
           </div>
