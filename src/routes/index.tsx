@@ -8,7 +8,7 @@ const packagingPathAsset = { url: "/images/envases-marca.png" };
 import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
-import { categories, products, packagingImage, type Product } from "@/lib/catalog";
+import { categories, products, packagingImage, packagingProducts, type Product } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -87,7 +87,7 @@ function Index() {
       </section>
 
       {projectType === "gifts" && <GiftFlow category={category} setCategory={setCategory} products={visibleProducts} chooseProduct={chooseProduct} viewDetails={setDetails} />}
-      {projectType === "packaging" && <PackagingFlow />}
+      {projectType === "packaging" && <PackagingFlow chooseProduct={chooseProduct} viewDetails={setDetails} />}
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
       <TrackOrder />
@@ -116,11 +116,303 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
   </div></section>;
 }
 
-function PackagingFlow() { return <section id="envases" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28"><div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-2"><div><p className="mb-3 text-xs font-bold uppercase text-primary">Vidrio para tu marca</p><h2 className="display text-5xl leading-none md:text-6xl">Envases diseñados alrededor de tu producto.</h2><p className="mt-6 max-w-xl leading-7 text-muted-foreground">Desarrollamos botellas, frascos y soluciones especiales para bebidas, alimentos, cosmética y productos de autor.</p><div className="mt-8 flex flex-wrap gap-2">{["Botellas", "Frascos", "Envases especiales", "Personalización", "Desarrollo de producto"].map(x => <span key={x} className="border border-border bg-card px-4 py-2 text-xs font-semibold">{x}</span>)}</div><Button className="mt-10" onClick={() => document.querySelector("#consulta-envases")?.scrollIntoView({behavior:"smooth"})}>Solicitar propuesta <ArrowRight size={15}/></Button></div><div className="min-h-96"><ImagePlaceholder label="Botellas y frascos CRISIL" image={packagingImage}/></div></div><PackagingForm /></section>; }
+function JarCard({ jar, chooseProduct, viewDetails }: { jar: Product; chooseProduct: (p: Product) => void; viewDetails: (p: Product) => void }) {
+  const [slide, setSlide] = useState<0 | 1>(0); // 0 = vacío (principal), 1 = lleno (en uso)
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
-function PackagingForm() { return <div id="consulta-envases" className="mx-auto mt-20 max-w-[1320px] border-t border-border pt-14"><h3 className="display text-4xl">Cuéntanos sobre tu envase</h3><div className="mt-8 grid gap-5 md:grid-cols-2">{["Tipo de producto", "Cantidad estimada", "Botella o frasco deseado", "Personalización", "Fecha objetivo", "Nombre y empresa"].map((label) => <label key={label} className="text-xs font-bold uppercase text-muted-foreground">{label}<input className="mt-2 h-12 w-full border border-input bg-card px-4 text-base font-normal text-foreground outline-none focus:border-primary" /></label>)}</div><Button className="mt-7">Preparar consulta <ArrowRight size={15}/></Button></div>; }
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
 
-function DetailModal({ product, close, choose }: { product:Product; close:()=>void; choose:()=>void }) { return <div className="fixed inset-0 z-50 flex items-end justify-center bg-primary/70 p-0 backdrop-blur-sm md:items-center md:p-6" onMouseDown={close}><div className="max-h-[92vh] w-full max-w-4xl overflow-auto bg-background" onMouseDown={(e)=>e.stopPropagation()}><div className="grid md:grid-cols-2"><ImagePlaceholder label={product.name} image={product.image}/><div className="p-7 md:p-10"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase text-primary">Regalo corporativo</p><Button variant="ghost" className="h-10 w-10 p-0" onClick={close} aria-label="Cerrar"><X/></Button></div><h2 className="display mt-5 text-5xl">{product.name}</h2><p className="mt-5 leading-7 text-muted-foreground">{product.description}</p>{product.specifications && <div className="mt-8 border-t border-border pt-6"><p className="mb-4 text-xs font-bold uppercase">Especificaciones</p>{product.specifications.map(x=><p key={x} className="mb-2 text-sm text-muted-foreground">{x}</p>)}{product.code && <p className="mt-4 text-xs font-bold">Código: {product.code}</p>}</div>}<Button className="mt-8" onClick={choose}>Elegir este regalo <ArrowRight size={15}/></Button></div></div></div></div>; }
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (diff > 40) {
+      // Swiped left -> show next (slide 1)
+      setSlide(1);
+    } else if (diff < -40) {
+      // Swiped right -> show prev (slide 0)
+      setSlide(0);
+    }
+    setTouchStart(null);
+  };
+
+  return (
+    <article className="group flex flex-col border border-border bg-card overflow-hidden">
+      {/* Slider / Carrusel de Imágenes */}
+      <div
+        className="relative aspect-[4/3] w-full overflow-hidden bg-card select-none touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Slide 0: Frasco vacío (Foto principal) */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center p-6 bg-white transition-opacity duration-300 ${
+            slide === 0 ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+          }`}
+        >
+          <img
+            src={jar.image}
+            alt={`${jar.name} vacío`}
+            loading="lazy"
+            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        {/* Slide 1: Frasco lleno / en uso */}
+        {jar.filledImage && (
+          <div
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              slide === 1 ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+            }`}
+          >
+            <img
+              src={jar.filledImage}
+              alt={`${jar.name} con contenido`}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+        )}
+
+        {/* Badge superior con estado */}
+        <span className="absolute top-3 left-3 z-20 bg-primary/90 text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded shadow-sm">
+          {slide === 0 ? "Envase vacío" : "Ejemplo en uso"}
+        </span>
+
+        {/* Flechas de navegación */}
+        {jar.filledImage && (
+          <>
+            <button
+              type="button"
+              onClick={() => setSlide(0)}
+              aria-label="Ver envase vacío"
+              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 h-8 w-8 rounded-full bg-background/80 hover:bg-background text-foreground flex items-center justify-center shadow transition-opacity ${
+                slide === 0 ? "opacity-30 cursor-default" : "opacity-90 hover:opacity-100"
+              }`}
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setSlide(1)}
+              aria-label="Ver con producto"
+              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 h-8 w-8 rounded-full bg-background/80 hover:bg-background text-foreground flex items-center justify-center shadow transition-opacity ${
+                slide === 1 ? "opacity-30 cursor-default" : "opacity-90 hover:opacity-100"
+              }`}
+            >
+              <ArrowRight size={16} />
+            </button>
+          </>
+        )}
+
+        {/* Indicadores / Dots de posición */}
+        {jar.filledImage && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full">
+            <button
+              type="button"
+              onClick={() => setSlide(0)}
+              className={`h-2 rounded-full transition-all ${
+                slide === 0 ? "w-6 bg-white" : "w-2 bg-white/50"
+              }`}
+              title="Foto principal (vacío)"
+            />
+            <button
+              type="button"
+              onClick={() => setSlide(1)}
+              className={`h-2 rounded-full transition-all ${
+                slide === 1 ? "w-6 bg-white" : "w-2 bg-white/50"
+              }`}
+              title="Foto con contenido"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Contenido y Especificaciones */}
+      <div className="p-6 flex flex-1 flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <span className="inline-block bg-primary text-primary-foreground font-mono font-bold text-xs px-2.5 py-1 rounded">
+              {jar.code}
+            </span>
+            <span className="text-[10px] font-bold uppercase text-muted-foreground">Mín. 50 uds.</span>
+          </div>
+
+          <h4 className="display text-2xl md:text-3xl text-primary">{jar.name}</h4>
+          <p className="mt-2 text-xs leading-5 text-muted-foreground">{jar.description}</p>
+
+          {/* Ficha técnica de medidas */}
+          <div className="mt-4 space-y-1 rounded bg-muted/40 p-3 text-xs">
+            {jar.specifications?.map((spec, i) => (
+              <div key={i} className="flex justify-between text-muted-foreground">
+                <span className="font-medium text-foreground">{spec.split(':')[0]}:</span>
+                <span>{spec.split(':')[1]?.trim() || spec}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Pie de página con recomendación de uso */}
+          {jar.footerNote && (
+            <div className="mt-4 border-l-2 border-primary/50 pl-3 py-1 bg-secondary/15 rounded-r">
+              <p className="text-[11px] font-medium leading-relaxed text-foreground/85">
+                <strong className="text-primary font-semibold">Aplicación sugerida:</strong> {jar.footerNote}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-border">
+          <Button onClick={() => chooseProduct(jar)} className="flex-1">
+            Cotizar envase <ArrowRight size={14}/>
+          </Button>
+          <Button variant="ghost" onClick={() => viewDetails(jar)} className="px-3">
+            Detalle
+          </Button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function PackagingFlow({ chooseProduct, viewDetails }: { chooseProduct:(p:Product)=>void; viewDetails:(p:Product)=>void }) {
+  return (
+    <section id="envases" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="grid gap-12 lg:grid-cols-2 items-center">
+          <div>
+            <p className="mb-3 text-xs font-bold uppercase text-primary">Vidrio para tu marca</p>
+            <h2 className="display text-5xl leading-none md:text-6xl">Envases diseñados alrededor de tu producto.</h2>
+            <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
+              Desarrollamos frascos, botellas y soluciones especiales en vidrio artesanal boliviano con tapa metálica hermética para alimentos gourmet, confitería, mieles, salsas y cosmética.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {["Frascos con tapa", "Mermeladas y dulces", "Miel y salsas", "Especias y condimentos", "Personalización", "Venta mayorista"].map(x => (
+                <span key={x} className="border border-border bg-card px-4 py-2 text-xs font-semibold">{x}</span>
+              ))}
+            </div>
+            <Button className="mt-10" onClick={() => document.querySelector("#catalogo-envases")?.scrollIntoView({behavior:"smooth"})}>
+              Ver catálogo de frascos <ArrowRight size={15}/>
+            </Button>
+          </div>
+          <div className="min-h-96">
+            <ImagePlaceholder label="Botellas y frascos CRISIL" image={packagingImage}/>
+          </div>
+        </div>
+
+        {/* Catálogo de Frascos */}
+        <div id="catalogo-envases" className="mt-24 border-t border-border pt-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase text-primary">Línea de Frascos Artesanales</p>
+              <h3 className="display text-4xl md:text-5xl">Elige el envase para tu producto</h3>
+            </div>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Desliza o haz clic en las flechas de cada producto para ver el envase vacío y su aplicación con producto real.
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {packagingProducts.map((jar) => (
+              <JarCard key={jar.id} jar={jar} chooseProduct={chooseProduct} viewDetails={viewDetails} />
+            ))}
+          </div>
+        </div>
+
+        <PackagingForm />
+      </div>
+    </section>
+  );
+}
+
+function PackagingForm() {
+  return (
+    <div id="consulta-envases" className="mx-auto mt-20 max-w-[1320px] border-t border-border pt-14">
+      <h3 className="display text-4xl">Cuéntanos sobre tu proyecto de envases</h3>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Completá los datos y te enviamos la cotización mayorista y disponibilidad a tu WhatsApp.
+      </p>
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        {["Tipo de producto (ej: mermelada, miel, café)", "Cantidad estimada de frascos", "Modelo de frasco (FR, FR1, FR2, FR8, FR9)", "Tipo de personalización / serigrafía", "Fecha requerida", "Nombre, empresa y WhatsApp"].map((label) => (
+          <label key={label} className="text-xs font-bold uppercase text-muted-foreground">
+            {label}
+            <input className="mt-2 h-12 w-full border border-input bg-card px-4 text-base font-normal text-foreground outline-none focus:border-primary" />
+          </label>
+        ))}
+      </div>
+      <Button
+        className="mt-7"
+        onClick={() => {
+          const msg = "Hola, me gustaría cotizar frascos de vidrio para mi producto.";
+          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+        }}
+      >
+        Preparar consulta por WhatsApp <ArrowRight size={15}/>
+      </Button>
+    </div>
+  );
+}
+
+function DetailModal({ product, close, choose }: { product:Product; close:()=>void; choose:()=>void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-primary/70 p-0 backdrop-blur-sm md:items-center md:p-6" onMouseDown={close}>
+      <div className="max-h-[92vh] w-full max-w-4xl overflow-auto bg-background" onMouseDown={(e)=>e.stopPropagation()}>
+        <div className="grid md:grid-cols-2">
+          {product.filledImage ? (
+            <div className="grid grid-cols-2 bg-muted/40 p-4 gap-3 items-center">
+              <div className="aspect-[3/4] overflow-hidden bg-card border border-border">
+                <img src={product.filledImage} alt={`${product.name} lleno`} className="h-full w-full object-cover" />
+                <p className="text-center text-[10px] font-bold uppercase py-1 bg-primary text-primary-foreground">En uso</p>
+              </div>
+              <div className="aspect-[3/4] overflow-hidden bg-card border border-border flex flex-col justify-between">
+                <img src={product.image} alt={product.name} className="h-full w-full object-contain p-2" />
+                <p className="text-center text-[10px] font-bold uppercase py-1 bg-secondary text-primary">Envase vacío</p>
+              </div>
+            </div>
+          ) : (
+            <ImagePlaceholder label={product.name} image={product.image}/>
+          )}
+          <div className="p-7 md:p-10">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2">
+                {product.code && (
+                  <span className="font-mono text-xs font-bold bg-primary text-primary-foreground px-2 py-0.5 rounded">
+                    {product.code}
+                  </span>
+                )}
+                <p className="text-xs font-bold uppercase text-primary">
+                  {product.category === "envases" ? "Envase para marca" : "Regalo corporativo"}
+                </p>
+              </div>
+              <Button variant="ghost" className="h-10 w-10 p-0" onClick={close} aria-label="Cerrar"><X/></Button>
+            </div>
+            <h2 className="display mt-4 text-4xl md:text-5xl">{product.name}</h2>
+            <p className="mt-4 leading-7 text-muted-foreground">{product.description}</p>
+            {product.specifications && (
+              <div className="mt-6 border-t border-border pt-5">
+                <p className="mb-3 text-xs font-bold uppercase text-primary">Especificaciones técnicas</p>
+                <div className="space-y-1.5 text-sm text-muted-foreground">
+                  {product.specifications.map(x=><p key={x} className="flex justify-between border-b border-border/50 pb-1"><span>{x}</span></p>)}
+                </div>
+              </div>
+            )}
+            {product.footerNote && (
+              <div className="mt-5 rounded bg-secondary/30 p-3 border border-secondary">
+                <p className="text-xs font-medium text-foreground">
+                  <strong>Aplicación recomendada:</strong> {product.footerNote}
+                </p>
+              </div>
+            )}
+            <Button className="mt-8 w-full sm:w-auto" onClick={choose}>
+              Elegir este modelo <ArrowRight size={15}/>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Configurator({ product, step, setStep, form, update }: { product:Product; step:number; setStep:(s:number)=>void; form:FormState; update:(k:keyof FormState,v:string)=>void }) {
   const progress = ["Cantidad", "Personalización", "Empaque", "Proyecto", "Propuesta"];
