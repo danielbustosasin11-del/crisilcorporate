@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
 import { AnnouncementCarousel } from "@/components/AnnouncementCarousel";
-import { StorySection } from "@/components/StorySection";
+import { StorySection, GlassSteps } from "@/components/StorySection";
+import { PathChooser } from "@/components/PathChooser";
+import { Reveal } from "@/components/Reveal";
 import { CaseStudy } from "@/components/CaseStudy";
 import { VideoReel } from "@/components/VideoReel";
 import { InstagramPeek, INSTAGRAM_USER } from "@/components/InstagramPeek";
@@ -14,8 +16,6 @@ import { WHATSAPP } from "@/lib/offers";
 import { LangProvider, LanguageGate, LangToggle, translateSpec, useLang } from "@/lib/i18n";
 
 const logoAsset = { url: "/images/logo-crisil.png" };
-const giftsPathAsset = { url: "/images/cofar/entrega.webp" };
-const packagingPathAsset = { url: "/images/marcas/del-valle-gondola.webp" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -131,50 +131,28 @@ function Index() {
       {/* 1. Portada: anuncios con fotos grandes */}
       <AnnouncementCarousel />
 
-      {/* 2. ¿Qué buscas crear? */}
-      <section id="proyecto" className="scroll-mt-4 bg-primary px-5 py-20 text-primary-foreground md:px-10 md:py-28">
-        <div className="mx-auto max-w-[1320px]">
-          <p className="mb-3 text-xs font-bold uppercase text-secondary">{t("Comencemos", "Let's begin")}</p>
-          <h2 className="display max-w-3xl text-5xl leading-none md:text-6xl">{t("¿Qué estás buscando crear?", "What would you like to create?")}</h2>
-          <p className="mt-5 text-primary-foreground/65">{t("Elige el camino que mejor describe tu proyecto.", "Choose the path that best fits your project.")}</p>
-          <div className="mt-12 grid gap-px bg-primary-foreground/20 md:grid-cols-2">
-            <SolutionCard
-              index="01"
-              title={t("Regalos corporativos", "Corporate gifts")}
-              text={t("Vasos, copas, jarras y sets con tu logo, en caja de regalo, para clientes, colaboradores o fechas especiales. Como los que entregamos a médicos de todo el país para Laboratorios COFAR.", "Glasses, goblets, pitchers and sets with your logo, in a gift box, for clients, staff or special dates. Like the ones we delivered to doctors nationwide for COFAR Laboratories.")}
-              image={giftsPathAsset.url}
-              imageClassName="object-[50%_70%]"
-              action={t("Ver regalos corporativos", "See corporate gifts")}
-              onClick={() => goTo("#regalos", "vasos")}
-            />
-            <SolutionCard
-              index="02"
-              title={t("Vidrio para tu marca", "Glass for your brand")}
-              text={t("Tu proveedor de botellas y frascos de vidrio para marcas de alimentos, bebidas, cosmética y restaurantes. Marcas como Del Valle ya llegan a la góndola en nuestros envases.", "Your supplier of glass bottles and jars for food, beverage and cosmetics brands, and restaurants. Brands like Del Valle already reach store shelves in our packaging.")}
-              image={packagingPathAsset.url}
-              imageClassName="object-center"
-              action={t("Ver botellas y frascos", "See bottles and jars")}
-              onClick={() => goTo("#regalos", "envases")}
-            />
-          </div>
-        </div>
-      </section>
+      {/* 2. ¿Qué buscas crear? (tarjetas con efecto pop, se puede cerrar) */}
+      <PathChooser onGifts={() => goTo("#regalos", "vasos")} onPackaging={() => goTo("#regalos", "envases")} nextId="#proceso" />
 
-      {/* 3. Catálogo único: regalos, cristalería y envases */}
+      {/* 3. Así creamos tu proyecto */}
+      <ProcessScroll />
+
+      {/* 4. Impacto social: video, cifras animadas y pilares */}
+      <StorySection />
+
+      {/* 5. Rastrear pedido */}
+      <TrackOrder />
+
+      {/* 6. Catálogo único: regalos, cristalería y envases */}
       <GiftFlow category={category} setCategory={setCategory} products={visibleProducts} chooseProduct={chooseProduct} viewDetails={setDetails} />
 
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
-      {/* 4. Caso real y videos */}
-      <CaseStudy />
+      {/* 7. Videos, cómo se hace el vidrio, caso COFAR e Instagram */}
       <VideoReel />
-
-      {/* 5. Cómo funciona, historia y redes */}
-      <ProcessScroll />
-      <StorySection />
+      <GlassSteps />
+      <CaseStudy />
       <InstagramPeek />
-
-      <TrackOrder />
 
       <footer className="border-t border-border px-5 py-12 md:px-10">
         <div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-8 md:flex-row">
@@ -209,23 +187,6 @@ function Index() {
   );
 }
 
-function SolutionCard({ index, title, text, action, image, imageClassName = "object-center", onClick }: { index: string; title: string; text: string; action: string; image: string; imageClassName?: string; onClick: () => void }) {
-  return (
-    <button type="button" onClick={onClick} className="group flex w-full min-w-0 flex-col bg-primary p-5 text-left transition-colors hover:bg-navy-soft sm:p-7 md:p-10">
-      <span className="text-xs text-secondary">{index}</span>
-      <div className="my-6 aspect-[4/3] w-full overflow-hidden border border-primary-foreground/15 md:my-8">
-        <img src={image} alt={title} loading="lazy" className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${imageClassName}`} />
-      </div>
-      <h3 className="display text-3xl sm:text-4xl">{title}</h3>
-      <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/65">{text}</p>
-      <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">
-        {action}
-        <ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1" />
-      </span>
-    </button>
-  );
-}
-
 function ProductImage({ product, alt }: { product: Product; alt: string }) {
   const { t } = useLang();
   if (!product.image)
@@ -255,11 +216,13 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
   return (
     <section id="regalos" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28">
       <div className="mx-auto max-w-[1320px]">
+        <Reveal>
         <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Catálogo 2026 · Vidrio reciclado soplado a mano", "2026 Catalog · Hand-blown recycled glass")}</p>
         <h2 className="display text-5xl leading-none md:text-6xl">{t("Elige tus piezas", "Choose your pieces")}</h2>
         <p className="mt-5 max-w-2xl text-muted-foreground">
           {t("Regalos corporativos, cristalería y envases para tu marca, todo en un solo lugar. Todas las piezas se pueden personalizar con tu logo. Toca un producto para ver sus fotos y medidas.", "Corporate gifts, glassware and packaging for your brand, all in one place. Every piece can carry your logo. Tap a product to see its photos and measurements.")}
         </p>
+        </Reveal>
         <div className="mt-10 flex gap-2 overflow-x-auto pb-3">
           {categories.map((item) => (
             <Button key={item.id} variant={category === item.id ? "primary" : "outline"} className="shrink-0" onClick={() => setCategory(item.id)}>
