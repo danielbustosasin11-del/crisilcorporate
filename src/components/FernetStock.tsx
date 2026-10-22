@@ -19,24 +19,24 @@ const specs = ["Altura: 15 cm", "Capacidad: 600 ml", "Peso: 500 g", "Incluye caj
 const tiers = [
   {
     id: "unidad",
-    label: "Por unidad",
+    label: "Pedido por unidad",
     price: 60,
-    range: "1 a 9 unidades",
+    range: "1 a 12 unidades",
     note: "Con su caja de regalo",
     message: "Hola, quisiera reservar Vaso Fernetero CRISIL (llegada 22 de octubre). Cantidad: ",
   },
   {
     id: "cantidad",
-    label: "Por cantidad",
+    label: "Pedido mayorista",
     price: 45,
-    range: "Desde 10 unidades",
-    note: "Ideal para regalos de equipo o reventa",
-    message: "Hola, quisiera reservar Vaso Fernetero CRISIL por cantidad (desde 10 unidades). Cantidad: ",
+    range: "Desde 24 unidades (2 docenas)",
+    note: "Ideal para regalos de equipo, eventos o reventa",
+    message: "Hola, quisiera reservar Vaso Fernetero CRISIL al por mayor (desde 24 unidades). Cantidad: ",
     highlight: true,
   },
   {
     id: "logo",
-    label: "Personalizado con tu logo",
+    label: "Pedido personalizado con tu logo",
     price: 80,
     range: "Desde 25 unidades",
     note: "Pedido para entrega antes de Halloween",
@@ -114,7 +114,9 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
             ))}
           </div>
 
-          <p className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-primary">
+          <p className="mt-4 text-xs text-muted-foreground">¿Necesitas entre 13 y 23 unidades? Escríbenos y te armamos el precio.</p>
+
+          <p className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-primary">
             <Check size={14} /> Pedidos con tu logo: mínimo 25 unidades, para entrega antes de Halloween{LOGO_CUTOFF ? ` · pedidos hasta el ${LOGO_CUTOFF}` : ""}
           </p>
         </div>
