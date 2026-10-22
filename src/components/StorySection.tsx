@@ -15,8 +15,8 @@ const diary = [
     image: "/images/historia/reciclado.webp",
     title: ["Medio ambiente", "Environment"],
     text: [
-      "Nuestra materia prima es vidrio blanco descartado, seleccionado y lavado a mano. Los hornos funcionan con gas natural local, cuidamos el agua en cada proceso y el vidrio que no sale perfecto vuelve al horno.",
-      "Our raw material is discarded white glass, carefully sorted and hand-washed. Our furnaces run on local natural gas, we minimize water use, and any imperfect glass goes back into the kiln.",
+      "Trabajamos con vidrio 100% reciclado, que seleccionamos y lavamos a mano. Los hornos funcionan con gas natural local, cuidamos el agua en cada proceso y el vidrio que no sale perfecto vuelve al horno.",
+      "We work with 100% recycled glass, carefully sorted and hand-washed. Our furnaces run on local natural gas, we minimize water use, and any imperfect glass goes back into the kiln.",
     ],
   },
   {
@@ -54,11 +54,11 @@ export function StorySection() {
       <div className="mx-auto max-w-[1320px]">
         <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Diario de impacto social", "Social impact journal")}</p>
         <h2 className="display max-w-4xl text-5xl leading-none md:text-6xl">
-          {t("Hecho a mano en Cochabamba, con vidrio que otros descartan", "Handmade in Cochabamba, from glass others throw away")}
+          {t("Hecho a mano en Cochabamba, con vidrio 100% reciclado", "Handmade in Cochabamba, from 100% recycled glass")}
         </h2>
 
         <div className="relative mt-10 overflow-hidden">
-          <img src="/images/historia/familias.webp" alt={t("Equipo y familias de CRISIL", "CRISIL team and families")} loading="lazy" className="aspect-[16/9] w-full object-cover object-[50%_35%] md:aspect-[21/9]" />
+          <img src="/images/historia/fabrica.webp" alt={t("Fábrica de CRISIL en Cochabamba", "CRISIL factory in Cochabamba")} loading="lazy" className="aspect-[16/9] w-full object-cover object-center md:aspect-[21/9]" />
         </div>
 
         <div className="mt-px grid grid-cols-2 gap-px bg-border md:grid-cols-4">

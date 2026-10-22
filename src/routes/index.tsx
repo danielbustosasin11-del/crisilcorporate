@@ -4,16 +4,15 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, Send, Sparkles, X } fr
 import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
-import { FernetStock } from "@/components/FernetStock";
-import { HalloweenPromo } from "@/components/HalloweenPromo";
 import { AnnouncementCarousel } from "@/components/AnnouncementCarousel";
 import { StorySection } from "@/components/StorySection";
-import { categories, products, packagingImage, packagingProducts, type Product } from "@/lib/catalog";
+import { categories, products, packagingProducts, type Product } from "@/lib/catalog";
+import { WHATSAPP } from "@/lib/offers";
 import { LangProvider, LanguageGate, LangToggle, translateSpec, useLang } from "@/lib/i18n";
 
 const logoAsset = { url: "/images/logo-crisil.png" };
-const giftsPathAsset = { url: "/images/regalos-fernetera.jpg" };
-const packagingPathAsset = { url: "/images/envases-marca.png" };
+const giftsPathAsset = { url: "/images/historia/brindis.webp" };
+const packagingPathAsset = { url: "/images/historia/frascos-portada.webp" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,9 +30,12 @@ export const Route = createFileRoute("/")({
 
 type FormState = { quantity: string; customization: string; packaging: string; date: string; name: string; company: string; role: string; whatsapp: string; email: string; occasion: string; notes: string };
 const initialForm: FormState = { quantity: "", customization: "", packaging: "", date: "", name: "", company: "", role: "", whatsapp: "", email: "", occasion: "", notes: "" };
-const WHATSAPP_NUMBER = "59169218942";
+const WHATSAPP_NUMBER = WHATSAPP;
 
-const activePackaging = packagingProducts.filter((p) => p.active);
+// Envases: se muestran como una categoría más del mismo catálogo (foto vacío + foto con producto)
+const activePackaging: Product[] = packagingProducts
+  .filter((p) => p.active)
+  .map((p) => ({ ...p, gallery: [p.image, p.filledImage].filter(Boolean) as string[], fit: "contain" as const }));
 
 // Textos del producto según idioma (si falta la versión en inglés, se usa el español)
 function useProductText() {
@@ -65,9 +67,10 @@ function Index() {
   const [form, setForm] = useState(initialForm);
   const [details, setDetails] = useState<Product | null>(null);
 
-  const visibleProducts = useMemo(() => products.filter((p) => p.active && p.category === category), [category]);
+  const visibleProducts = useMemo(() => (category === "envases" ? activePackaging : products.filter((p) => p.active && p.category === category)), [category]);
   const update = (key: keyof FormState, value: string) => setForm((current) => ({ ...current, [key]: value }));
-  const goTo = (target: string) => {
+  const goTo = (target: string, cat?: string) => {
+    if (cat) setCategory(cat);
     setMenuOpen(false);
     window.setTimeout(() => document.querySelector(target)?.scrollIntoView({ behavior: "smooth" }), 30);
   };
@@ -77,9 +80,9 @@ function Index() {
     window.setTimeout(() => document.querySelector("#configurador")?.scrollIntoView({ behavior: "smooth" }), 30);
   };
 
-  const nav: [string, string, string][] = [
-    ["#regalos", "Catálogo", "Catalog"],
-    ["#envases", "Vidrio para tu marca", "Glass for your brand"],
+  const nav: [string, string, string, string?][] = [
+    ["#regalos", "Catálogo", "Catalog", "vasos"],
+    ["#regalos", "Envases para tu marca", "Packaging for brands", "envases"],
     ["#historia", "Nuestra historia", "Our story"],
     ["#tracking", "Rastrear pedido", "Track order"],
   ];
@@ -93,8 +96,8 @@ function Index() {
             <span className="text-2xl font-bold tracking-[0.18em]">CRISIL</span>
           </a>
           <nav className="hidden items-center gap-7 text-xs font-semibold uppercase lg:flex">
-            {nav.map(([href, es, en]) => (
-              <a key={href} href={href} className="hover:opacity-70">
+            {nav.map(([href, es, en, cat]) => (
+              <a key={es} href={href} className="hover:opacity-70" onClick={(e) => { e.preventDefault(); goTo(href, cat); }}>
                 {t(es, en)}
               </a>
             ))}
@@ -112,8 +115,8 @@ function Index() {
         {menuOpen && (
           <nav className="border-t border-primary-foreground/20 bg-primary px-5 py-6 lg:hidden">
             <div className="flex flex-col gap-5 text-sm font-semibold uppercase">
-              {nav.map(([href, es, en]) => (
-                <a key={href} href={href} onClick={() => setMenuOpen(false)}>
+              {nav.map(([href, es, en, cat]) => (
+                <a key={es} href={href} onClick={(e) => { e.preventDefault(); goTo(href, cat); }}>
                   {t(es, en)}
                 </a>
               ))}
@@ -137,9 +140,9 @@ function Index() {
               title={t("Regalos corporativos", "Corporate gifts")}
               text={t("Vasos, copas, jarras y sets personalizados para tus clientes, colaboradores, invitados o VIPs.", "Custom glasses, goblets, pitchers and sets for your clients, team, guests or VIPs.")}
               image={giftsPathAsset.url}
-              imageClassName="object-bottom"
-              action={t("Ver el catálogo", "See the catalog")}
-              onClick={() => goTo("#regalos")}
+              imageClassName="object-center"
+              action={t("Ver regalos corporativos", "See corporate gifts")}
+              onClick={() => goTo("#regalos", "vasos")}
             />
             <SolutionCard
               index="02"
@@ -147,26 +150,19 @@ function Index() {
               text={t("Botellas, frascos y envases de vidrio personalizados para tu producto.", "Custom bottles, jars and glass packaging for your product.")}
               image={packagingPathAsset.url}
               imageClassName="object-center"
-              action={t("Explorar envases de vidrio", "Explore glass packaging")}
-              onClick={() => goTo("#envases")}
+              action={t("Ver envases de vidrio", "See glass packaging")}
+              onClick={() => goTo("#regalos", "envases")}
             />
           </div>
         </div>
       </section>
 
-      {/* 3. Catálogo */}
+      {/* 3. Catálogo único: regalos, cristalería y envases */}
       <GiftFlow category={category} setCategory={setCategory} products={visibleProducts} chooseProduct={chooseProduct} viewDetails={setDetails} />
-
-      {/* 4. Ofertas del momento */}
-      <HalloweenPromo whatsapp={WHATSAPP_NUMBER} />
-      <FernetStock whatsapp={WHATSAPP_NUMBER} />
-
-      {/* 5. Envases para marcas */}
-      <PackagingFlow chooseProduct={chooseProduct} viewDetails={setDetails} />
 
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
-      {/* 6. Cómo funciona e historia */}
+      {/* 4. Cómo funciona e historia */}
       <ProcessScroll />
       <StorySection />
 
@@ -248,10 +244,10 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
   return (
     <section id="regalos" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28">
       <div className="mx-auto max-w-[1320px]">
-        <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Catálogo 2026 · Vidrio soplado a mano", "2026 Catalog · Hand-blown glass")}</p>
+        <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Catálogo 2026 · Vidrio reciclado soplado a mano", "2026 Catalog · Hand-blown recycled glass")}</p>
         <h2 className="display text-5xl leading-none md:text-6xl">{t("Elige tus piezas", "Choose your pieces")}</h2>
         <p className="mt-5 max-w-2xl text-muted-foreground">
-          {t("Todas se pueden personalizar con el logo de tu empresa. Abre cada producto para ver sus fotos y medidas.", "Every piece can be customized with your company logo. Open each product to see its photos and measurements.")}
+          {t("Regalos corporativos, cristalería y envases para tu marca, todo en un solo lugar. Todas las piezas se pueden personalizar con tu logo. Toca un producto para ver sus fotos y medidas.", "Corporate gifts, glassware and packaging for your brand, all in one place. Every piece can carry your logo. Tap a product to see its photos and measurements.")}
         </p>
         <div className="mt-10 flex gap-2 overflow-x-auto pb-3">
           {categories.map((item) => (
@@ -263,7 +259,7 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
         <div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {products.map((product) => (
             <article key={product.id} className="group flex flex-col border border-border bg-card">
-              <button type="button" onClick={() => viewDetails(product)} className="relative aspect-[4/5] overflow-hidden bg-[#efebe5]" aria-label={`${t("Ver detalle de", "View details of")} ${pt.name(product)}`}>
+              <button type="button" onClick={() => viewDetails(product)} className={`relative aspect-[4/5] overflow-hidden ${product.category === "envases" ? "bg-white" : "bg-[#efebe5]"}`} aria-label={`${t("Ver detalle de", "View details of")} ${pt.name(product)}`}>
                 <ProductImage product={product} alt={pt.name(product)} />
                 {product.gallery && product.gallery.length > 1 && (
                   <span className="absolute bottom-2 right-2 bg-primary/85 px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
@@ -285,128 +281,6 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
               </div>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function JarCard({ jar, chooseProduct, viewDetails }: { jar: Product; chooseProduct: (p: Product) => void; viewDetails: (p: Product) => void }) {
-  const { t } = useLang();
-  const pt = useProductText();
-  const [slide, setSlide] = useState<0 | 1>(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-
-  return (
-    <article className="group flex flex-col overflow-hidden border border-border bg-card">
-      <div
-        className="relative aspect-[3/4] w-full select-none overflow-hidden bg-white touch-pan-y"
-        onTouchStart={(e) => setTouchStart(e.touches[0]?.clientX ?? null)}
-        onTouchEnd={(e) => {
-          if (touchStart === null) return;
-          const diff = touchStart - (e.changedTouches[0]?.clientX ?? touchStart);
-          if (diff > 40) setSlide(1);
-          else if (diff < -40) setSlide(0);
-          setTouchStart(null);
-        }}
-      >
-        <div className={`absolute inset-0 flex items-center justify-center bg-white p-6 transition-opacity duration-300 ${slide === 0 ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0"}`}>
-          <img src={jar.image} alt={`${pt.name(jar)} ${t("vacío", "empty")}`} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
-        </div>
-        {jar.filledImage && (
-          <div className={`absolute inset-0 transition-opacity duration-300 ${slide === 1 ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0"}`}>
-            <img src={jar.filledImage} alt={`${pt.name(jar)} ${t("con contenido", "filled")}`} loading="lazy" className="h-full w-full object-cover object-center" />
-          </div>
-        )}
-        <span className="absolute left-3 top-3 z-20 rounded bg-primary/90 px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-sm">
-          {slide === 0 ? t("Envase vacío", "Empty jar") : t("Ejemplo en uso", "In use")}
-        </span>
-        {jar.filledImage && (
-          <>
-            <button type="button" onClick={() => setSlide(0)} aria-label={t("Ver envase vacío", "View empty jar")} className={`absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground shadow transition-opacity hover:bg-background ${slide === 0 ? "cursor-default opacity-30" : "opacity-90 hover:opacity-100"}`}>
-              <ArrowLeft size={16} />
-            </button>
-            <button type="button" onClick={() => setSlide(1)} aria-label={t("Ver con producto", "View with product")} className={`absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground shadow transition-opacity hover:bg-background ${slide === 1 ? "cursor-default opacity-30" : "opacity-90 hover:opacity-100"}`}>
-              <ArrowRight size={16} />
-            </button>
-          </>
-        )}
-      </div>
-      <div className="flex flex-1 flex-col justify-between p-6">
-        <div>
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <span className="inline-block rounded bg-primary px-2.5 py-1 font-mono text-xs font-bold text-primary-foreground">{jar.code}</span>
-            <span className="text-[10px] font-bold uppercase text-muted-foreground">{t("Mín. 50 uds.", "Min. 50 units")}</span>
-          </div>
-          <h4 className="display text-2xl text-primary md:text-3xl">{pt.name(jar)}</h4>
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
-          <Button onClick={() => chooseProduct(jar)} className="flex-1">
-            {t("Cotizar envase", "Quote this jar")} <ArrowRight size={14} />
-          </Button>
-          <Button variant="ghost" onClick={() => viewDetails(jar)} className="px-3">
-            {t("Detalle", "Details")}
-          </Button>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function PackagingFlow({ chooseProduct, viewDetails }: { chooseProduct: (p: Product) => void; viewDetails: (p: Product) => void }) {
-  const { t } = useLang();
-  const tags: [string, string][] = [
-    ["Frascos con tapa", "Jars with lids"],
-    ["Mermeladas y dulces", "Jams & sweets"],
-    ["Miel y salsas", "Honey & sauces"],
-    ["Especias y condimentos", "Spices & seasonings"],
-    ["Personalización", "Customization"],
-    ["Venta mayorista", "Wholesale"],
-  ];
-  return (
-    <section id="envases" className="scroll-mt-4 px-5 py-20 md:px-10 md:py-28">
-      <div className="mx-auto max-w-[1320px]">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Vidrio para tu marca", "Glass for your brand")}</p>
-            <h2 className="display text-5xl leading-none md:text-6xl">{t("Envases diseñados alrededor de tu producto.", "Packaging designed around your product.")}</h2>
-            <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
-              {t(
-                "Desarrollamos frascos, botellas y soluciones especiales en vidrio artesanal boliviano con tapa metálica hermética para alimentos gourmet, confitería, mieles, salsas y cosmética.",
-                "We develop jars, bottles and special solutions in handcrafted Bolivian glass with airtight metal lids for gourmet food, confectionery, honey, sauces and cosmetics.",
-              )}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {tags.map(([es, en]) => (
-                <span key={es} className="border border-border bg-card px-4 py-2 text-xs font-semibold">
-                  {t(es, en)}
-                </span>
-              ))}
-            </div>
-            <Button className="mt-10" onClick={() => document.querySelector("#catalogo-envases")?.scrollIntoView({ behavior: "smooth" })}>
-              {t("Ver catálogo de frascos", "See jar catalog")} <ArrowRight size={15} />
-            </Button>
-          </div>
-          <div className="min-h-96">
-            <img src={packagingImage} alt={t("Botellas y frascos CRISIL", "CRISIL bottles and jars")} loading="lazy" className="h-full w-full object-contain p-2" />
-          </div>
-        </div>
-
-        <div id="catalogo-envases" className="mt-24 border-t border-border pt-16">
-          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <p className="mb-2 text-xs font-bold uppercase text-primary">{t("Línea de frascos artesanales", "Handcrafted jar line")}</p>
-              <h3 className="display text-4xl md:text-5xl">{t("Elige el envase para tu producto", "Choose the jar for your product")}</h3>
-            </div>
-            <p className="max-w-md text-sm text-muted-foreground">
-              {t("Desliza o usa las flechas para ver el envase vacío y con producto. ¿Buscas otro modelo? Tenemos más en catálogo: escríbenos.", "Swipe or use the arrows to see each jar empty and filled. Looking for another model? We have more: message us.")}
-            </p>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {activePackaging.map((jar) => (
-              <JarCard key={jar.id} jar={jar} chooseProduct={chooseProduct} viewDetails={viewDetails} />
-            ))}
-          </div>
         </div>
       </div>
     </section>

@@ -2,6 +2,14 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-22 (2) (rama oferta-ferneteras, pendiente de aprobar)
+- **Halloween primero en la portada:** imagen nueva con fondo negro, el vaso con calabaza, telarañas, arañas y murciélagos (versión vertical aparte para celular). Texto: "Aceptamos pedidos corporativos con diseños personalizados de Halloween hasta el 26 de octubre, para entrega el 31." El botón abre WhatsApp directo.
+- **Se quitó el anuncio y la sección del Vaso Fernetero** (el fernetero sigue en el catálogo, en "Bar y regalos"), y la sección aparte de Halloween (queda solo el anuncio de portada).
+- **Un solo catálogo:** los envases ahora son una pestaña más ("Envases para tu marca") del mismo catálogo; se eliminó la sección de envases separada.
+- **Fotos nuevas** en "Regalos corporativos" (brindis) y "Vidrio para tu marca" (frascos de la portada de COLLECTION 3). Ninguna foto se repite en la página.
+- Ya no aparece "vidrio descartado": ahora dice "vidrio reciclado" / "100% reciclado".
+- Número de WhatsApp y fechas de Halloween centralizados en `src/lib/offers.ts`.
+
 ## 2026-10-22 (rama oferta-ferneteras, pendiente de aprobar)
 - **Portada nueva:** anuncios a pantalla completa con fotos grandes que rotan solos (Impacto social 500 familias, Vidrio 100% reciclado, Soplado a mano, Halloween 2026, Vaso Fernetero). Se editan en `AnnouncementCarousel.tsx`.
 - **Catálogo nuevo de 44 productos** (fuente: catálogo CRISIL COLLECTION 3 y fotos de estudio de la carpeta "fotos catalogo"), en 5 categorías: Vasos, Copas, Jarras y sets, Bar y regalos, Hogar y floreros. Cada producto con galería de fotos y medidas. Se juntaron modelos parecidos en una sola ficha (ej. Copas de Champaña CH6/CF/CF2, Sets de Noche A/B/Dúo, Frasco de cocina T4G/T4M/T4P).

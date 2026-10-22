@@ -259,6 +259,7 @@ export const categories = [
   { id: "jarras", name: "Jarras y sets", nameEn: "Pitchers & sets" },
   { id: "bar", name: "Bar y regalos", nameEn: "Bar & gifts" },
   { id: "hogar", name: "Hogar y floreros", nameEn: "Home & vases" },
+  { id: "envases", name: "Envases para tu marca", nameEn: "Packaging for brands" },
 ];
 
 // Catálogo de regalos y cristalería (fuente: CRISIL COLLECTION 3 + fotos de estudio). Máximo 50 productos en total con envases.

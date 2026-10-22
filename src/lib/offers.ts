@@ -1,12 +1,9 @@
-// Datos de las ofertas activas. Para cambiar fechas, cupos o mensajes, editar solo este archivo.
+// Datos de contacto y ofertas activas. Para cambiar el número o las fechas, editar solo este archivo.
 
-export const STOCK_TOTAL = 60;
+// Número de WhatsApp de ventas (formato internacional, sin + ni espacios)
+export const WHATSAPP = "59169218942";
 
-// Llegada del Vaso Fernetero a Santa Cruz. Cuando lleguen, cambiar a: "Pronta entrega"
-export const ARRIVAL = "22 de octubre";
-
-// Fecha límite de pedidos con logo, ej: "25 de octubre" (confirmar con Ian). Vacío = no se muestra
-export const LOGO_CUTOFF = "";
-
-// Oferta especial de Halloween, ej: "Diseño de Halloween sin costo". Vacío = no se muestra
-export const HALLOWEEN_OFFER = "";
+// Halloween 2026: fecha límite para pedidos corporativos con diseño personalizado y fecha de entrega
+// (estas fechas también aparecen en el anuncio de la portada, en AnnouncementCarousel.tsx)
+export const HALLOWEEN_CUTOFF = "26 de octubre";
+export const HALLOWEEN_DELIVERY = "31 de octubre";
