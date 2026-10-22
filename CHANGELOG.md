@@ -2,6 +2,9 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-21 (rama oferta-ferneteras, pendiente de aprobar)
+- **Nueva sección "Fernetera CRISIL" (pronta entrega Santa Cruz):** 3 precios (60 Bs por unidad, 45 Bs desde 10, 80 Bs con logo desde 25) con botón a WhatsApp. Stock: 60 unidades, pedido ERP CRS-2026-VCD6HN.
+
 ## 2026-10-21
 - **Proceso "Así creamos tu proyecto":** pasos reformulados con textos más claros, centrados respecto a la imagen; se quitaron los números (01, 02…) y los íconos.
 - **Envases (Vidrio para tu marca):** la segunda foto (envase lleno) ya no se corta; el carrusel ahora usa formato vertical.

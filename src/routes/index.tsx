@@ -8,6 +8,7 @@ const packagingPathAsset = { url: "/images/envases-marca.png" };
 import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
+import { FernetStock } from "@/components/FernetStock";
 import { categories, products, packagingImage, packagingProducts, type Product } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
@@ -74,6 +75,8 @@ function Index() {
           <div className="reveal max-w-lg lg:justify-self-end"><p className="mb-7 text-base leading-7 text-primary-foreground/85 md:text-lg">Vidrio artesanal, personalización y empaque unidos para crear regalos memorables para tus clientes, colaboradores y eventos.</p><div className="flex flex-wrap gap-3"><Button onClick={() => begin(null)}>Crear mi proyecto <ArrowRight size={15} /></Button><Button variant="outline" className="border-primary-foreground/50 bg-transparent text-primary-foreground hover:border-primary-foreground hover:text-primary-foreground" onClick={() => document.querySelector("#proceso")?.scrollIntoView({ behavior: "smooth" })}>Ver cómo funciona</Button></div></div>
         </div>
       </section>
+
+      <FernetStock whatsapp={WHATSAPP_NUMBER} />
 
       <ProcessScroll />
 
