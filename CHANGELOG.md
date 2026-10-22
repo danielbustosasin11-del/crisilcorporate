@@ -2,6 +2,15 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-22 (3) (rama oferta-ferneteras, pendiente de aprobar)
+- **Tarjeta "Regalos corporativos":** vuelve la foto de la entrega a Laboratorios COFAR (cajas Novadol Forte) y el texto menciona el caso.
+- **Tarjeta "Vidrio para tu marca":** enfocada a empresas y restaurantes que buscan proveedor de botellas y frascos; foto real de mermeladas Del Valle en góndola (de un video de @crisil.srl).
+- **4 botellas nuevas** del catálogo de frascos: FR21 (450 ml), FR13 (400 ml), BT3 (400 ml) y BTM (600 ml), con foto vacía y con producto. Para seguir en 50 productos se juntaron fichas: Línea Floral (vaso + florero XL), Copa Martini (incluye set de 4), Bowls y Compoteras, Colección de Floreros (incluye FN).
+- **Nueva sección "Caso real · Laboratorios COFAR"** con las 4 fotos de médicos recibiendo su regalo del Día del Médico.
+- **Nueva sección de videos** (6 clips cortos, sin sonido, se reproducen solos al verlos): soplado, templado, de la fábrica a tu mesa, empacando pedidos, envases en góndola y presentación. Se descartaron los videos marcados "AI-generated" por TikTok y el de Carnytek.
+- **La historia de impacto social** ahora abre con un video de la fábrica.
+- **Adelanto de Instagram @crisilbol** con 5 fotos que llevan al perfil, y enlace en el pie de página.
+
 ## 2026-10-22 (2) (rama oferta-ferneteras, pendiente de aprobar)
 - **Halloween primero en la portada:** imagen nueva con fondo negro, el vaso con calabaza, telarañas, arañas y murciélagos (versión vertical aparte para celular). Texto: "Aceptamos pedidos corporativos con diseños personalizados de Halloween hasta el 26 de octubre, para entrega el 31." El botón abre WhatsApp directo.
 - **Se quitó el anuncio y la sección del Vaso Fernetero** (el fernetero sigue en el catálogo, en "Bar y regalos"), y la sección aparte de Halloween (queda solo el anuncio de portada).

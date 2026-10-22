@@ -6,13 +6,16 @@ import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
 import { AnnouncementCarousel } from "@/components/AnnouncementCarousel";
 import { StorySection } from "@/components/StorySection";
+import { CaseStudy } from "@/components/CaseStudy";
+import { VideoReel } from "@/components/VideoReel";
+import { InstagramPeek, INSTAGRAM_USER } from "@/components/InstagramPeek";
 import { categories, products, packagingProducts, type Product } from "@/lib/catalog";
 import { WHATSAPP } from "@/lib/offers";
 import { LangProvider, LanguageGate, LangToggle, translateSpec, useLang } from "@/lib/i18n";
 
 const logoAsset = { url: "/images/logo-crisil.png" };
-const giftsPathAsset = { url: "/images/historia/brindis.webp" };
-const packagingPathAsset = { url: "/images/historia/frascos-portada.webp" };
+const giftsPathAsset = { url: "/images/cofar/entrega.webp" };
+const packagingPathAsset = { url: "/images/marcas/del-valle-gondola.webp" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -138,19 +141,19 @@ function Index() {
             <SolutionCard
               index="01"
               title={t("Regalos corporativos", "Corporate gifts")}
-              text={t("Vasos, copas, jarras y sets personalizados para tus clientes, colaboradores, invitados o VIPs.", "Custom glasses, goblets, pitchers and sets for your clients, team, guests or VIPs.")}
+              text={t("Vasos, copas, jarras y sets con tu logo, en caja de regalo, para clientes, colaboradores o fechas especiales. Como los que entregamos a médicos de todo el país para Laboratorios COFAR.", "Glasses, goblets, pitchers and sets with your logo, in a gift box, for clients, staff or special dates. Like the ones we delivered to doctors nationwide for COFAR Laboratories.")}
               image={giftsPathAsset.url}
-              imageClassName="object-center"
+              imageClassName="object-[50%_70%]"
               action={t("Ver regalos corporativos", "See corporate gifts")}
               onClick={() => goTo("#regalos", "vasos")}
             />
             <SolutionCard
               index="02"
               title={t("Vidrio para tu marca", "Glass for your brand")}
-              text={t("Botellas, frascos y envases de vidrio personalizados para tu producto.", "Custom bottles, jars and glass packaging for your product.")}
+              text={t("Tu proveedor de botellas y frascos de vidrio para marcas de alimentos, bebidas, cosmética y restaurantes. Marcas como Del Valle ya llegan a la góndola en nuestros envases.", "Your supplier of glass bottles and jars for food, beverage and cosmetics brands, and restaurants. Brands like Del Valle already reach store shelves in our packaging.")}
               image={packagingPathAsset.url}
               imageClassName="object-center"
-              action={t("Ver envases de vidrio", "See glass packaging")}
+              action={t("Ver botellas y frascos", "See bottles and jars")}
               onClick={() => goTo("#regalos", "envases")}
             />
           </div>
@@ -162,9 +165,14 @@ function Index() {
 
       {selected && <Configurator product={selected} step={step} setStep={setStep} form={form} update={update} />}
 
-      {/* 4. Cómo funciona e historia */}
+      {/* 4. Caso real y videos */}
+      <CaseStudy />
+      <VideoReel />
+
+      {/* 5. Cómo funciona, historia y redes */}
       <ProcessScroll />
       <StorySection />
+      <InstagramPeek />
 
       <TrackOrder />
 
@@ -180,6 +188,9 @@ function Index() {
           <div className="text-sm text-muted-foreground">
             <p>{t("Hecho a mano en Bolivia · 100% vidrio reciclado", "Handmade in Bolivia · 100% recycled glass")}</p>
             <p className="mt-1">{t("Regalos corporativos y desarrollo de envases", "Corporate gifts and packaging development")}</p>
+            <a href={`https://www.instagram.com/${INSTAGRAM_USER}/`} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block font-semibold text-primary hover:underline">
+              Instagram @{INSTAGRAM_USER}
+            </a>
           </div>
         </div>
       </footer>

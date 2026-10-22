@@ -58,7 +58,7 @@ export function StorySection() {
         </h2>
 
         <div className="relative mt-10 overflow-hidden">
-          <img src="/images/historia/fabrica.webp" alt={t("Fábrica de CRISIL en Cochabamba", "CRISIL factory in Cochabamba")} loading="lazy" className="aspect-[16/9] w-full object-cover object-center md:aspect-[21/9]" />
+          <video src="/videos/fabrica.mp4" poster="/videos/fabrica.webp" autoPlay muted loop playsInline preload="metadata" aria-label={t("Artesanos trabajando en la fábrica de CRISIL", "Artisans at work in the CRISIL factory")} className="aspect-[16/9] w-full object-cover object-center md:aspect-[21/9]" />
         </div>
 
         <div className="mt-px grid grid-cols-2 gap-px bg-border md:grid-cols-4">

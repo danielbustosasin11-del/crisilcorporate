@@ -251,6 +251,78 @@ export const packagingProducts: Product[] = [
     featured: true,
     active: true,
   },
+  {
+    id: "envase-fr21",
+    name: "Botella FR21 450 ml",
+    nameEn: "FR21 Bottle 450 ml",
+    category: "envases",
+    code: "FR21",
+    description: "Botella de boca ancha y cuerpo amplio, con tapa metálica de 38 mm.",
+    descriptionEn: "Wide-mouth bottle with a generous body and a 38 mm metal lid.",
+    specifications: ["Altura: 17.2 cm aprox.", "Diámetro mayor: 8 cm aprox.", "Peso: 345 gr aprox.", "Capacidad: 450 ml", "Tapa metálica de 38 mm"],
+    image: "/images/envases/fr21-vacio.webp",
+    filledImage: "/images/envases/fr21-lleno.webp",
+    footerNote: "Ideal para jugos, limonadas, leches vegetales y bebidas de restaurante.",
+    footerNoteEn: "Ideal for juices, lemonades, plant milks and restaurant drinks.",
+    customizationAvailable: true,
+    minimumOrder: 50,
+    featured: true,
+    active: true,
+  },
+  {
+    id: "envase-fr13",
+    name: "Botella FR13 400 ml",
+    nameEn: "FR13 Bottle 400 ml",
+    category: "envases",
+    code: "FR13",
+    description: "Botella tipo lechera de cuello corto, con tapa metálica de 38 mm.",
+    descriptionEn: "Milk-style bottle with a short neck and a 38 mm metal lid.",
+    specifications: ["Altura: 17.4 cm aprox.", "Diámetro mayor: 6.7 cm aprox.", "Peso: 320 gr aprox.", "Capacidad: 400 ml", "Tapa metálica de 38 mm"],
+    image: "/images/envases/fr13-vacio.webp",
+    filledImage: "/images/envases/fr13-lleno.webp",
+    footerNote: "Perfecta para leche, yogur bebible, cold brew y jugos prensados.",
+    footerNoteEn: "Perfect for milk, drinkable yogurt, cold brew and pressed juices.",
+    customizationAvailable: true,
+    minimumOrder: 50,
+    featured: true,
+    active: true,
+  },
+  {
+    id: "envase-bt3",
+    name: "Botella BT3 400 ml",
+    nameEn: "BT3 Bottle 400 ml",
+    category: "envases",
+    code: "BT3",
+    description: "Botella alta y esbelta de cuello largo, con tapa metálica de 34 mm.",
+    descriptionEn: "Tall, slender long-neck bottle with a 34 mm metal lid.",
+    specifications: ["Altura: 28 cm aprox.", "Diámetro mayor: 6 cm aprox.", "Peso: 536 gr aprox.", "Capacidad: 400 ml", "Tapa metálica de 34 mm"],
+    image: "/images/envases/bt3-vacio.webp",
+    filledImage: "/images/envases/bt3-lleno.webp",
+    footerNote: "Ideal para aceites, vinagres, salsas, licores y jarabes.",
+    footerNoteEn: "Ideal for oils, vinegars, sauces, liqueurs and syrups.",
+    customizationAvailable: true,
+    minimumOrder: 50,
+    featured: true,
+    active: true,
+  },
+  {
+    id: "envase-btm",
+    name: "Botella BTM 600 ml",
+    nameEn: "BTM Bottle 600 ml",
+    category: "envases",
+    code: "BTM",
+    description: "Botella clásica de cuello largo y gran capacidad, con tapa metálica de 34 mm.",
+    descriptionEn: "Classic long-neck, large-capacity bottle with a 34 mm metal lid.",
+    specifications: ["Altura: 29.5 cm aprox.", "Diámetro mayor: 7.5 cm aprox.", "Peso: 550 gr aprox.", "Capacidad: 600 ml", "Tapa metálica de 34 mm"],
+    image: "/images/envases/btm-vacio.webp",
+    filledImage: "/images/envases/btm-lleno.webp",
+    footerNote: "Para jugos, agua saborizada, kombucha, licores y bebidas de autor.",
+    footerNoteEn: "For juices, flavored water, kombucha, liqueurs and signature drinks.",
+    customizationAvailable: true,
+    minimumOrder: 50,
+    featured: true,
+    active: true,
+  },
 ];
 
 export const categories = [
@@ -495,27 +567,25 @@ export const products: Product[] = [
   },
   {
     id: "g10",
-    name: "Bowl Natura",
-    nameEn: "Natura Bowl",
+    name: "Bowls y Compoteras",
+    nameEn: "Bowls & Dessert Bowls",
     category: "vasos",
-    code: "G10",
-    description: "Para postres, helado, frutas o snacks.",
-    descriptionEn: "For desserts, ice cream, fruit or snacks.",
+    code: "G10 / GL1 / GL2",
+    description: "Bowl Natura y compoteras de vidrio para postres, helado, frutas, ensaladas o snacks.",
+    descriptionEn: "Natura bowl and glass dessert bowls for desserts, ice cream, fruit, salads or snacks.",
     specifications: [
-        "Altura 8.8 cm",
-        "Diámetro 13 cm",
-        "Capacidad 450 ml",
-        "Peso 320 g"
+        "Bowl Natura: 8.8 cm, 450 ml",
+        "Compoteras GL1 y GL2"
     ],
     specificationsEn: [
-        "Height 8.8 cm",
-        "Diameter 13 cm",
-        "Capacity 450 ml",
-        "Weight 320 g"
+        "Natura bowl: 8.8 cm, 450 ml",
+        "GL1 and GL2 dessert bowls"
     ],
     image: "/images/productos/g10.webp",
     gallery: [
-        "/images/productos/g10.webp"
+        "/images/productos/g10.webp",
+        "/images/productos/compotero.webp",
+        "/images/productos/compotero-2.webp"
     ],
     customizationAvailable: true,
     minimumOrder: 25,
@@ -524,27 +594,26 @@ export const products: Product[] = [
   },
   {
     id: "w1f",
-    name: "Vaso Floral",
-    nameEn: "Floral Glass",
+    name: "Línea Floral",
+    nameEn: "Floral Line",
     category: "vasos",
-    code: "W1F",
-    description: "Flores de colores estilo retro, para jugos o agua.",
-    descriptionEn: "Colorful retro-inspired flowers, for juice or water.",
+    code: "W1F / TFLO",
+    description: "Vasos y florero XL con flores de colores estilo retro. Para jugos, agua o como pieza decorativa.",
+    descriptionEn: "Glasses and an XL vase with colorful retro flowers. For juice, water or as a decorative piece.",
     specifications: [
-        "Altura 8.6 cm",
-        "Diámetro 8 cm",
-        "Capacidad 250 ml",
+        "Vaso: 8.6 cm, 250 ml",
+        "Florero XL: 38 cm, 2750 ml",
         "Serigrafía de flores"
     ],
     specificationsEn: [
-        "Height 8.6 cm",
-        "Diameter 8 cm",
-        "Capacity 250 ml",
+        "Glass: 8.6 cm, 250 ml",
+        "XL vase: 38 cm, 2750 ml",
         "Screen-printed flowers"
     ],
     image: "/images/productos/w1f.webp",
     gallery: [
-        "/images/productos/w1f.webp"
+        "/images/productos/w1f.webp",
+        "/images/productos/tflo.webp"
     ],
     customizationAvailable: true,
     minimumOrder: 25,
@@ -752,8 +821,8 @@ export const products: Product[] = [
     nameEn: "Martini Glass",
     category: "copas",
     code: "CTM",
-    description: "La copa icónica de coctelería. También para postres.",
-    descriptionEn: "The iconic cocktail glass. Also lovely for desserts.",
+    description: "La copa icónica de coctelería. También para postres. También en set de 4 copas.",
+    descriptionEn: "The iconic cocktail glass. Also lovely for desserts. Also available as a set of 4.",
     specifications: [
         "Altura 17 cm",
         "Diámetro 11.2 cm",
@@ -769,7 +838,8 @@ export const products: Product[] = [
     image: "/images/productos/ctm.webp",
     gallery: [
         "/images/productos/ctm.webp",
-        "/images/productos/ctm-2.webp"
+        "/images/productos/ctm-2.webp",
+        "/images/productos/set-martini.webp"
     ],
     customizationAvailable: true,
     minimumOrder: 25,
@@ -1248,24 +1318,6 @@ export const products: Product[] = [
     active: true,
   },
   {
-    id: "set-martini",
-    name: "Set de 4 Copas Martini",
-    nameEn: "Set of 4 Martini Glasses",
-    category: "bar",
-    code: "MT",
-    description: "Cuatro copas martini para coctelería de autor.",
-    descriptionEn: "Four martini glasses for signature cocktails.",
-    image: "/images/productos/set-martini.webp",
-    gallery: [
-        "/images/productos/set-martini.webp"
-    ],
-    fit: "contain",
-    customizationAvailable: true,
-    minimumOrder: 25,
-    featured: true,
-    active: true,
-  },
-  {
     id: "set-copa-grande",
     name: "Set de 3 Copas Grandes",
     nameEn: "Set of 3 Large Goblets",
@@ -1330,105 +1382,32 @@ export const products: Product[] = [
     active: true,
   },
   {
-    id: "compotero",
-    name: "Compotera",
-    nameEn: "Dessert Bowl",
-    category: "hogar",
-    code: "GL1 / GL2",
-    description: "Compotera de vidrio para frutas, ensaladas o postres. Dos modelos.",
-    descriptionEn: "A glass bowl for fruit, salads or desserts. Two models.",
-    image: "/images/productos/compotero.webp",
-    gallery: [
-        "/images/productos/compotero.webp",
-        "/images/productos/compotero-2.webp"
-    ],
-    customizationAvailable: true,
-    minimumOrder: 25,
-    featured: true,
-    active: true,
-  },
-  {
-    id: "florero-fn",
-    name: "Florero FN",
-    nameEn: "FN Vase",
-    category: "hogar",
-    code: "FN",
-    description: "Pieza escultórica de vidrio artesanal, también en caja de regalo.",
-    descriptionEn: "A sculptural handcrafted glass vase, also available in a gift box.",
-    specifications: [
-        "Altura 24 cm",
-        "Diámetro 15 cm",
-        "Capacidad 2850 ml",
-        "Peso 1300 g"
-    ],
-    specificationsEn: [
-        "Height 24 cm",
-        "Diameter 15 cm",
-        "Capacity 2850 ml",
-        "Weight 1300 g"
-    ],
-    image: "/images/productos/florero-fn.webp",
-    gallery: [
-        "/images/productos/florero-fn.webp",
-        "/images/productos/florero-fn-2.webp"
-    ],
-    customizationAvailable: true,
-    minimumOrder: 25,
-    featured: true,
-    active: true,
-  },
-  {
     id: "floreros",
     name: "Colección de Floreros",
     nameEn: "Vase Collection",
     category: "hogar",
-    code: "DEG / F / FE",
-    description: "Más de 30 modelos de floreros soplados a mano. Consúltanos el catálogo completo.",
-    descriptionEn: "Over 30 hand-blown vase models. Ask us for the full catalog.",
+    code: "FN / DEG / F / FE",
+    description: "Más de 30 modelos de floreros soplados a mano, como el escultórico FN, también en caja de regalo. Consúltanos el catálogo completo.",
+    descriptionEn: "Over 30 hand-blown vase models, like the sculptural FN, also in a gift box. Ask us for the full catalog.",
     specifications: [
+        "FN: 24 cm, 2850 ml",
         "Alturas de 7 a 38 cm",
         "Capacidades de 70 a 2850 ml"
     ],
     specificationsEn: [
+        "FN: 24 cm, 2850 ml",
         "Heights from 7 to 38 cm",
         "Capacities from 70 to 2850 ml"
     ],
-    image: "/images/productos/floreros.webp",
+    image: "/images/productos/florero-fn.webp",
     gallery: [
+        "/images/productos/florero-fn.webp",
+        "/images/productos/florero-fn-2.webp",
         "/images/productos/floreros.webp",
         "/images/productos/floreros-2.webp",
         "/images/productos/floreros-3.webp"
     ],
     fit: "contain",
-    customizationAvailable: true,
-    minimumOrder: 25,
-    featured: true,
-    active: true,
-  },
-  {
-    id: "tflo",
-    name: "Florero Floral XL",
-    nameEn: "XL Floral Vase",
-    category: "hogar",
-    code: "TFLO",
-    description: "Pieza alta con flores retro, como florero o jarra.",
-    descriptionEn: "A tall piece with retro flowers, as a vase or pitcher.",
-    specifications: [
-        "Altura 38 cm",
-        "Diámetro 10 cm",
-        "Capacidad 2750 ml",
-        "Serigrafía de flores"
-    ],
-    specificationsEn: [
-        "Height 38 cm",
-        "Diameter 10 cm",
-        "Capacity 2750 ml",
-        "Screen-printed flowers"
-    ],
-    image: "/images/productos/tflo.webp",
-    gallery: [
-        "/images/productos/tflo.webp"
-    ],
     customizationAvailable: true,
     minimumOrder: 25,
     featured: true,
