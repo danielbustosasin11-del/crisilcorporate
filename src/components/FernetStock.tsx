@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 // Para cambiar precios, stock, fecha de llegada o fotos, editar solo este bloque.
 const STOCK_TOTAL = 60;
 const ARRIVAL = "22 de octubre"; // cuando lleguen, cambiar a: "Pronta entrega"
+const LOGO_CUTOFF = ""; // fecha límite de pedidos con logo, ej: "25 de octubre" (confirmar con Ian). Vacío = no se muestra
 
 const photos = [
-  { src: "/images/fernetglass/fernetglass-ficha.webp", alt: "FernetGlass con su caja de regalo" },
-  { src: "/images/fernetglass/fernetglass-fondo-claro.webp", alt: "Vaso FernetGlass de vidrio artesanal" },
-  { src: "/images/fernetglass/fernetglass-fondo-negro.webp", alt: "Vaso FernetGlass sobre fondo oscuro" },
+  { src: "/images/fernetglass/fernetglass-ficha.webp", alt: "Vaso Fernetero CRISIL con su caja de regalo" },
+  { src: "/images/fernetglass/fernetglass-fondo-claro.webp", alt: "Vaso Fernetero CRISIL de vidrio artesanal" },
+  { src: "/images/fernetglass/fernetglass-fondo-negro.webp", alt: "Vaso Fernetero CRISIL sobre fondo oscuro" },
 ];
 
 const specs = ["Altura: 15 cm", "Capacidad: 600 ml", "Peso: 500 g", "Incluye caja"];
@@ -22,7 +23,7 @@ const tiers = [
     price: 60,
     range: "1 a 9 unidades",
     note: "Con su caja de regalo",
-    message: "Hola, quisiera reservar FernetGlass de CRISIL (llegada 22 de octubre). Cantidad: ",
+    message: "Hola, quisiera reservar Vaso Fernetero CRISIL (llegada 22 de octubre). Cantidad: ",
   },
   {
     id: "cantidad",
@@ -30,16 +31,16 @@ const tiers = [
     price: 45,
     range: "Desde 10 unidades",
     note: "Ideal para regalos de equipo o reventa",
-    message: "Hola, quisiera reservar FernetGlass de CRISIL por cantidad (desde 10 unidades). Cantidad: ",
+    message: "Hola, quisiera reservar Vaso Fernetero CRISIL por cantidad (desde 10 unidades). Cantidad: ",
     highlight: true,
   },
   {
     id: "logo",
-    label: "Con tu logo",
+    label: "Personalizado con tu logo",
     price: 80,
     range: "Desde 25 unidades",
-    note: "Personalizado para tu empresa · plazo a coordinar",
-    message: "Hola, quisiera cotizar FernetGlass de CRISIL personalizados con el logo de mi empresa (desde 25 unidades). Empresa: ",
+    note: "Pedido para entrega antes de Halloween",
+    message: "Hola, quisiera cotizar Vaso Fernetero CRISIL personalizado con el logo de mi empresa, para entrega antes de Halloween (desde 25 unidades). Empresa: ",
   },
 ];
 
@@ -82,9 +83,9 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
 
         <div>
           <p className="mb-3 text-xs font-bold uppercase text-primary">Llega a Santa Cruz · {ARRIVAL}</p>
-          <h2 className="display text-5xl leading-none md:text-6xl">FernetGlass</h2>
+          <h2 className="display text-5xl leading-none md:text-6xl">Vaso Fernetero CRISIL</h2>
           <p className="mt-5 max-w-xl text-muted-foreground">
-            Vidrio auténtico soplado con pasión en Bolivia, en su caja de regalo. Stock limitado de {STOCK_TOTAL} unidades: reserva el tuyo.
+            Vidrio auténtico soplado con pasión en Bolivia, en su caja de regalo. Stock limitado de {STOCK_TOTAL} unidades: reserva el tuyo. Mientras más unidades, menor el precio por unidad.
           </p>
 
           <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-foreground/80">
@@ -103,7 +104,7 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
                 <p className="display mt-3 text-5xl leading-none">
                   {t.price} <span className="text-xl">Bs</span>
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">por unidad</p>
+                <p className="mt-1 text-xs text-muted-foreground">precio por unidad</p>
                 <p className="mt-4 text-sm font-semibold">{t.range}</p>
                 <p className="mt-1 flex-1 text-xs leading-5 text-muted-foreground">{t.note}</p>
                 <Button variant={t.highlight ? "default" : "outline"} className="mt-5 w-full" onClick={() => open(t.message)}>
@@ -114,7 +115,7 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
           </div>
 
           <p className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-primary">
-            <Check size={14} /> Pedidos con logo: pedido mínimo de 25 unidades
+            <Check size={14} /> Pedidos con tu logo: mínimo 25 unidades, para entrega antes de Halloween{LOGO_CUTOFF ? ` · pedidos hasta el ${LOGO_CUTOFF}` : ""}
           </p>
         </div>
       </div>
