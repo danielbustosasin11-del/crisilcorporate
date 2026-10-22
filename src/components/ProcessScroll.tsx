@@ -22,7 +22,7 @@ export function ProcessScroll() {
     const obs = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
-          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.i));
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset["i"]));
         }),
       { rootMargin },
     );
@@ -51,8 +51,8 @@ export function ProcessScroll() {
                 src={s.img}
                 alt={en ? s.te : s.t}
                 loading={i === 0 ? "eager" : "lazy"}
-                className={`absolute inset-0 h-full w-full object-cover ${s.pos} transition-all duration-700 ease-out motion-reduce:transition-none ${
-                  i === active ? "scale-100 opacity-100" : "scale-105 opacity-0"
+                className={`absolute inset-0 h-full w-full object-cover ${s.pos} transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
+                  i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
                 }`}
               />
             ))}
@@ -76,8 +76,8 @@ export function ProcessScroll() {
                 ref={(el) => {
                   refs.current[i] = el;
                 }}
-                className={`flex min-h-[60svh] flex-col items-center justify-center border-b border-border px-2 py-10 text-center transition-all duration-500 last:border-0 md:min-h-[75vh] ${
-                  i === active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-30"
+                className={`flex min-h-[60svh] flex-col items-center justify-center border-b border-border px-2 py-10 text-center transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] last:border-0 md:min-h-[75vh] ${
+                  i === active ? "translate-y-0 opacity-100" : "translate-y-5 opacity-25"
                 }`}
               >
                 <h3 className="display mb-4 text-4xl md:text-5xl">{en ? te : t}</h3>

@@ -2,6 +2,15 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-22 (4) (publicado en main el 22/10)
+- **Animaciones al hacer scroll:** las secciones aparecen suavemente al llegar a ellas (respeta "reducir movimiento" del celular o computadora).
+- **"¿Qué estás buscando crear?":** las dos tarjetas aparecen con efecto pop, una después de la otra. Botón "Ahora no, seguir viendo" que pliega la sección y lleva a "Así creamos tu proyecto".
+- **"Así creamos tu proyecto":** misma animación, más fluida (transiciones más largas y suaves).
+- **Impacto social:** los números (80, ~500, 100%, 30+) cuentan desde cero al aparecer; Medio ambiente / Innovación / Calidad se deslizan de lado en celular, con puntos.
+- **"Cómo hacemos el vidrio"** ahora es una sección propia: la foto queda fija y se funde con la siguiente al bajar, con el paso actual indicado.
+- **CRISIL × COFAR:** sección más simple, con título, descripción breve y fotos de los médicos que cambian solas o con flechas.
+- **Nuevo orden:** Portada → ¿Qué buscas crear? → Así creamos tu proyecto → Impacto social → Rastrea tu pedido → Catálogo → Videos → Cómo hacemos el vidrio → CRISIL × COFAR → Instagram.
+
 ## 2026-10-22 (3) (publicado en main el 22/10)
 - **Tarjeta "Regalos corporativos":** vuelve la foto de la entrega a Laboratorios COFAR (cajas Novadol Forte) y el texto menciona el caso.
 - **Tarjeta "Vidrio para tu marca":** enfocada a empresas y restaurantes que buscan proveedor de botellas y frascos; foto real de mermeladas Del Valle en góndola (de un video de @crisil.srl).
