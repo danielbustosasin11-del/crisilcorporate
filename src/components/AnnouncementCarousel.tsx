@@ -1,51 +1,113 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ARRIVAL } from "@/lib/offers";
+import { useLang } from "@/lib/i18n";
 
-// Anuncios rotativos de la página principal.
-// Para agregar uno nuevo (ej: Diario de conciencia social, Nuestro proceso), sumar un objeto a `slides`.
-type Slide = { tag: string; title: string; text: string; cta: string; href: string; image: string; imageAlt: string };
+// PORTADA: anuncios con fotos grandes que van rotando.
+// Para agregar un anuncio nuevo, sumar un objeto a `slides` (texto en español y en inglés).
+// layout "full": la foto ocupa toda la pantalla. "split": texto a la izquierda y foto del producto a la derecha.
+type Slide = {
+  tag: [string, string];
+  title: [string, string];
+  text: [string, string];
+  cta: [string, string];
+  href: string;
+  image: string;
+  imageAlt: string;
+  layout: "full" | "split";
+  position?: string;
+  dark?: boolean;
+};
 
 const slides: Slide[] = [
   {
-    tag: "Halloween 2026 · Cupos limitados",
-    title: "Tu logo, tu calabaza, tu vaso",
-    text: "Vasos de vidrio soplado en Bolivia con el logo de tu empresa y diseño de Halloween, para entrega antes de Halloween.",
-    cta: "Cotizar para Halloween",
+    tag: ["Impacto social", "Social impact"],
+    title: ["Vidrio que sostiene a 500 familias", "Glass that supports 500 families"],
+    text: [
+      "Damos empleo directo a 80 personas en Cochabamba y apoyamos a unas 500 familias que recolectan y revenden el vidrio que reciclamos.",
+      "We directly employ 80 people in Cochabamba and support around 500 families who collect and resell the glass we recycle.",
+    ],
+    cta: ["Conoce nuestra historia", "Discover our story"],
+    href: "#historia",
+    image: "/images/historia/familias.webp",
+    imageAlt: "Equipo y familias de CRISIL compartiendo un almuerzo al aire libre",
+    layout: "full",
+    position: "object-[50%_35%]",
+  },
+  {
+    tag: ["100% vidrio reciclado", "100% recycled glass"],
+    title: ["Del vidrio descartado a tu mesa", "From discarded glass to your table"],
+    text: [
+      "Seleccionamos y lavamos a mano vidrio blanco descartado. Lo que no sale perfecto vuelve al horno para ser vidrio nuevo.",
+      "We sort and hand-wash discarded white glass. Anything imperfect goes back into the kiln to become new glass.",
+    ],
+    cta: ["Ver el catálogo", "See the catalog"],
+    href: "#regalos",
+    image: "/images/historia/reciclado.webp",
+    imageAlt: "Vidrio reciclado listo para fundir en la fábrica de CRISIL",
+    layout: "full",
+    position: "object-center",
+  },
+  {
+    tag: ["Soplado a mano en Bolivia", "Hand-blown in Bolivia"],
+    title: ["Cada pieza nace del fuego a 1200 °C", "Every piece is born from fire at 1200 °C"],
+    text: [
+      "Nuestros artesanos soplan y forman cada vaso, copa y jarra a mano. Regalos corporativos con historia de verdad.",
+      "Our artisans blow and shape every glass, goblet and pitcher by hand. Corporate gifts with a real story.",
+    ],
+    cta: ["Crear mi regalo corporativo", "Create my corporate gift"],
+    href: "#proyecto",
+    image: "/images/historia/horno.webp",
+    imageAlt: "Vidrio incandescente en la punta de la caña de soplado",
+    layout: "full",
+    position: "object-[30%_50%]",
+  },
+  {
+    tag: ["Halloween 2026 · Cupos limitados", "Halloween 2026 · Limited spots"],
+    title: ["Tu logo, tu calabaza, tu vaso", "Your logo, your pumpkin, your glass"],
+    text: [
+      "Vasos de vidrio soplado con el logo de tu empresa y diseño de Halloween, para entrega antes de Halloween.",
+      "Hand-blown glasses with your company logo and a Halloween design, delivered before Halloween.",
+    ],
+    cta: ["Cotizar para Halloween", "Quote for Halloween"],
     href: "#halloween",
     image: "/images/halloween/vaso-halloween-2026.webp",
     imageAlt: "Vaso con calabaza de Halloween 2026",
+    layout: "split",
+    dark: true,
   },
   {
-    tag: `Llega a Santa Cruz · ${ARRIVAL}`,
-    title: "Vaso Fernetero CRISIL",
-    text: "Vidrio artesanal en su caja de regalo. Stock limitado: reserva el tuyo antes de que se acabe.",
-    cta: "Reservar el mío",
+    tag: [`Llega a Santa Cruz · ${ARRIVAL}`, "Arriving in Santa Cruz"],
+    title: ["Vaso Fernetero CRISIL", "CRISIL Fernet Glass"],
+    text: [
+      "Vidrio artesanal en su caja de regalo. Stock limitado: reserva el tuyo antes de que se acabe.",
+      "Handcrafted glass in its gift box. Limited stock: reserve yours before it runs out.",
+    ],
+    cta: ["Reservar el mío", "Reserve mine"],
     href: "#fernet",
     image: "/images/fernetglass/fernetglass-ficha.webp",
     imageAlt: "Vaso Fernetero CRISIL con su caja",
-  },
-  {
-    tag: "Seguimiento de pedidos",
-    title: "Rastrea tu pedido",
-    text: "Ingresa tu código CRS y mira en qué etapa va tu pedido, sin tener que escribirnos.",
-    cta: "Rastrear mi pedido",
-    href: "#tracking",
-    image: "/images/portada-corporativos.jpg",
-    imageAlt: "Colección de vidrio artesanal CRISIL",
+    layout: "split",
   },
 ];
 
-const INTERVAL_MS = 6000;
+const INTERVAL_MS = 7000;
 
 export function AnnouncementCarousel() {
+  const { lang } = useLang();
+  const L = lang === "en" ? 1 : 0;
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const [touchX, setTouchX] = useState<number | null>(null);
   const go = (n: number) => setI((n + slides.length) % slides.length);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let reduce = false;
+    try {
+      reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      reduce = false;
+    }
     if (paused || reduce) return;
     const t = window.setInterval(() => setI((c) => (c + 1) % slides.length), INTERVAL_MS);
     return () => window.clearInterval(t);
@@ -53,65 +115,87 @@ export function AnnouncementCarousel() {
 
   return (
     <section
-      aria-label="Anuncios"
-      className="bg-primary text-primary-foreground"
+      id="inicio"
+      aria-roledescription="carrusel"
+      aria-label={lang === "en" ? "Announcements" : "Anuncios"}
+      className="relative h-[100svh] min-h-[620px] overflow-hidden bg-primary text-primary-foreground"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => setTouchX(e.touches[0].clientX)}
+      onTouchStart={(e) => setTouchX(e.touches[0]?.clientX ?? null)}
       onTouchEnd={(e) => {
         if (touchX === null) return;
-        const d = touchX - e.changedTouches[0].clientX;
+        const d = touchX - (e.changedTouches[0]?.clientX ?? touchX);
         if (d > 40) go(i + 1);
         else if (d < -40) go(i - 1);
         setTouchX(null);
       }}
     >
-      <div className="relative mx-auto h-[560px] max-w-[1440px] overflow-hidden md:h-[420px]">
-        {slides.map((s, n) => (
+      {slides.map((s, n) => {
+        const active = n === i;
+        const content = (
+          <div className="max-w-2xl">
+            <p className="mb-4 inline-block bg-secondary px-3 py-1 text-[11px] font-bold uppercase text-primary">{s.tag[L]}</p>
+            <h1 className="display text-5xl leading-[.95] sm:text-6xl lg:text-7xl">{s.title[L]}</h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-primary-foreground/85 md:text-lg">{s.text[L]}</p>
+            <a
+              href={s.href}
+              tabIndex={active ? 0 : -1}
+              className="mt-8 inline-flex items-center gap-2 bg-primary-foreground px-6 py-4 text-xs font-bold uppercase text-primary hover:opacity-90"
+            >
+              {s.cta[L]} <ArrowRight size={15} />
+            </a>
+          </div>
+        );
+        return (
           <div
-            key={s.title}
-            aria-hidden={n !== i}
-            className={`absolute inset-0 grid grid-rows-[220px_1fr] transition-opacity duration-500 md:grid-cols-[1fr_.8fr] md:grid-rows-1 ${
-              n === i ? "opacity-100" : "pointer-events-none opacity-0"
-            }`}
+            key={s.image}
+            aria-hidden={!active}
+            className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${active ? "opacity-100" : "pointer-events-none opacity-0"}`}
           >
-            <div className="flex flex-col justify-center px-5 py-6 md:order-1 md:px-10">
-              <p className="mb-3 text-xs font-bold uppercase text-secondary">{s.tag}</p>
-              <h2 className="display text-4xl leading-none md:text-6xl">{s.title}</h2>
-              <p className="mt-4 max-w-lg text-sm leading-6 text-primary-foreground/85 md:text-base">{s.text}</p>
-              <a
-                href={s.href}
-                tabIndex={n === i ? 0 : -1}
-                className="mt-6 inline-flex w-fit items-center gap-2 bg-primary-foreground px-5 py-3 text-xs font-bold uppercase text-primary hover:opacity-90"
-              >
-                {s.cta} <ArrowRight size={14} />
-              </a>
-            </div>
-            <div className="row-start-1 overflow-hidden md:order-2 md:row-start-auto">
-              <img src={s.image} alt={s.imageAlt} loading={n === 0 ? "eager" : "lazy"} className="h-full w-full object-cover object-center" />
-            </div>
+            {s.layout === "full" ? (
+              <>
+                <img
+                  src={s.image}
+                  alt={s.imageAlt}
+                  loading={n === 0 ? "eager" : "lazy"}
+                  className={`absolute inset-0 h-full w-full object-cover ${s.position ?? "object-center"} transition-transform duration-[7000ms] ease-out motion-reduce:transition-none ${active ? "scale-105" : "scale-100"}`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
+                <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
+              </>
+            ) : (
+              <div className={`grid h-full md:grid-cols-[1.1fr_.9fr] ${s.dark ? "bg-[#141414]" : "bg-primary"}`}>
+                <div className="relative order-2 flex items-end px-5 pb-28 pt-6 md:order-1 md:items-center md:px-10 md:pb-16 md:pt-28">
+                  <div className="mx-auto w-full max-w-[640px] md:mr-0">{content}</div>
+                </div>
+                <div className="relative order-1 h-[42svh] overflow-hidden md:order-2 md:h-full">
+                  <img src={s.image} alt={s.imageAlt} loading="lazy" className="h-full w-full object-cover object-center" />
+                </div>
+              </div>
+            )}
           </div>
-        ))}
+        );
+      })}
 
-        <div className="absolute bottom-4 left-5 z-10 flex items-center gap-3 md:left-10">
-          <button type="button" onClick={() => go(i - 1)} aria-label="Anuncio anterior" className="flex h-8 w-8 items-center justify-center rounded-full bg-background/20 hover:bg-background/40">
-            <ArrowLeft size={15} />
-          </button>
-          <div className="flex gap-1.5">
-            {slides.map((s, n) => (
-              <button
-                key={s.title}
-                type="button"
-                onClick={() => setI(n)}
-                aria-label={`Ver anuncio ${n + 1}`}
-                className={`h-2 rounded-full bg-white transition-all ${n === i ? "w-6" : "w-2 opacity-50"}`}
-              />
-            ))}
-          </div>
-          <button type="button" onClick={() => go(i + 1)} aria-label="Anuncio siguiente" className="flex h-8 w-8 items-center justify-center rounded-full bg-background/20 hover:bg-background/40">
-            <ArrowRight size={15} />
-          </button>
+      <div className="absolute bottom-6 left-5 z-20 flex items-center gap-3 md:left-10">
+        <button type="button" onClick={() => go(i - 1)} aria-label={lang === "en" ? "Previous" : "Anterior"} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/40 bg-primary/30 backdrop-blur-sm hover:bg-primary/60">
+          <ArrowLeft size={16} />
+        </button>
+        <div className="flex gap-1.5">
+          {slides.map((s, n) => (
+            <button
+              key={s.image}
+              type="button"
+              onClick={() => setI(n)}
+              aria-label={`${lang === "en" ? "Slide" : "Anuncio"} ${n + 1}`}
+              aria-current={n === i}
+              className={`h-2 rounded-full bg-white transition-all ${n === i ? "w-7" : "w-2 opacity-50"}`}
+            />
+          ))}
         </div>
+        <button type="button" onClick={() => go(i + 1)} aria-label={lang === "en" ? "Next" : "Siguiente"} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/40 bg-primary/30 backdrop-blur-sm hover:bg-primary/60">
+          <ArrowRight size={16} />
+        </button>
       </div>
     </section>
   );

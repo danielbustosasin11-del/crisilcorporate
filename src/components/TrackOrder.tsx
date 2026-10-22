@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
 export function TrackOrder() {
   const [code, setCode] = useState("");
+  const { t } = useLang();
 
   function handleTrack(e: React.FormEvent) {
     e.preventDefault();
@@ -18,14 +20,13 @@ export function TrackOrder() {
           {/* Left: copy */}
           <div>
             <p className="mb-3 text-xs font-bold uppercase tracking-widest text-primary-foreground/60">
-              Seguimiento en tiempo real
+              {t("Seguimiento en tiempo real", "Real-time tracking")}
             </p>
             <h2 className="display text-4xl leading-tight md:text-5xl mb-4">
-              Rastreá tu pedido
+              {t("Rastrea tu pedido", "Track your order")}
             </h2>
             <p className="text-primary-foreground/70 max-w-sm text-sm leading-7">
-              Ingresá el código que te envió tu ejecutivo de ventas y seguí cada
-              etapa de tu pedido — desde producción hasta la entrega.
+              {t("Ingresa el código que te envió tu ejecutivo de ventas y sigue cada etapa de tu pedido, desde producción hasta la entrega.", "Enter the code your sales representative sent you and follow every stage of your order, from production to delivery.")}
             </p>
           </div>
 
@@ -49,11 +50,11 @@ export function TrackOrder() {
                 type="submit"
                 className="bg-white text-primary font-bold text-sm px-6 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
               >
-                Ver estado →
+                {t("Ver estado", "Check status")} →
               </button>
             </form>
             <p className="mt-3 text-xs text-primary-foreground/40">
-              Tu código tiene el formato <span className="font-mono font-semibold text-primary-foreground/60">CRS-YYYY-XXXX</span>. Lo recibís al confirmar tu pedido.
+              {t("Tu código tiene el formato", "Your code looks like")} <span className="font-mono font-semibold text-primary-foreground/60">CRS-YYYY-XXXX</span>. {t("Lo recibes al confirmar tu pedido.", "You get it when your order is confirmed.")}
             </p>
           </div>
         </div>

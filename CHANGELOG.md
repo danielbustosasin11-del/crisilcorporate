@@ -2,6 +2,15 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-22 (rama oferta-ferneteras, pendiente de aprobar)
+- **Portada nueva:** anuncios a pantalla completa con fotos grandes que rotan solos (Impacto social 500 familias, Vidrio 100% reciclado, Soplado a mano, Halloween 2026, Vaso Fernetero). Se editan en `AnnouncementCarousel.tsx`.
+- **Catálogo nuevo de 44 productos** (fuente: catálogo CRISIL COLLECTION 3 y fotos de estudio de la carpeta "fotos catalogo"), en 5 categorías: Vasos, Copas, Jarras y sets, Bar y regalos, Hogar y floreros. Cada producto con galería de fotos y medidas. Se juntaron modelos parecidos en una sola ficha (ej. Copas de Champaña CH6/CF/CF2, Sets de Noche A/B/Dúo, Frasco de cocina T4G/T4M/T4P).
+- **Nuevos productos:** Mate Vibes, Hielera H1, sets de whisky, cerveceros, martini y copa grande, bowls Aurora, compotera, floreros.
+- **Envases:** quedan 6 visibles (FR, FR8, FR9, FR16, M3, FR7); FR1, FR2, FRP y M4 quedan ocultos (`active: false`) para no pasar de 50 productos en total.
+- **Español e inglés:** al entrar por primera vez la página pregunta el idioma; se puede cambiar con ES/EN arriba. Los mensajes de WhatsApp siempre llegan en español.
+- **Nueva sección "Diario de impacto social"** con fotos reales de la fábrica, cifras (80 empleos, ~500 familias, 100% reciclado) y los 5 pasos de cómo se hace el vidrio.
+- **Nuevo orden de la página:** Portada → ¿Qué buscas crear? → Catálogo → Halloween → Vaso Fernetero → Envases → Cómo funciona → Historia → Rastreo.
+
 ## 2026-10-21 (rama oferta-ferneteras, pendiente de aprobar)
 - **Sección "Vaso Fernetero CRISIL" (llega a Santa Cruz el 22/10):** galería de 3 fotos, ficha (15 cm, 600 ml, 500 g, incluye caja) y 3 tramos SIN precios visibles (1 a 12 unidades, mayorista desde 24, personalizado con logo desde 25) con botón a WhatsApp. Stock: 60 unidades, pedido ERP CRS-2026-VCD6HN.
 - **Sección Halloween 2026:** vaso con calabaza y "Tu logo, tu calabaza, tu vaso", botón a WhatsApp. Oferta especial opcional en `src/lib/offers.ts` (HALLOWEEN_OFFER).
