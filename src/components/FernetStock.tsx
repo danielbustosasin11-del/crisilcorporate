@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ARRIVAL, LOGO_CUTOFF, STOCK_TOTAL } from "@/lib/offers";
 
-// Oferta FernetGlass de pronta entrega en Santa Cruz (stock limitado).
-// Para cambiar precios, stock, fecha de llegada o fotos, editar solo este bloque.
-const STOCK_TOTAL = 60;
-const ARRIVAL = "22 de octubre"; // cuando lleguen, cambiar a: "Pronta entrega"
-const LOGO_CUTOFF = ""; // fecha límite de pedidos con logo, ej: "25 de octubre" (confirmar con Ian). Vacío = no se muestra
+// Vaso Fernetero CRISIL. Los precios NO se muestran: se cotizan por WhatsApp.
 
 const photos = [
   { src: "/images/fernetglass/fernetglass-ficha.webp", alt: "Vaso Fernetero CRISIL con su caja de regalo" },
@@ -20,24 +17,21 @@ const tiers = [
   {
     id: "unidad",
     label: "Pedido por unidad",
-    price: 60,
     range: "1 a 12 unidades",
     note: "Con su caja de regalo",
     message: "Hola, quisiera reservar Vaso Fernetero CRISIL (llegada 22 de octubre). Cantidad: ",
   },
   {
-    id: "cantidad",
+    id: "mayorista",
     label: "Pedido mayorista",
-    price: 45,
-    range: "Desde 24 unidades (2 docenas)",
-    note: "Ideal para regalos de equipo, eventos o reventa",
-    message: "Hola, quisiera reservar Vaso Fernetero CRISIL al por mayor (desde 24 unidades). Cantidad: ",
+    range: "Desde 24 unidades",
+    note: "2 docenas o más · ideal para regalos de equipo, eventos o reventa",
+    message: "Hola, quisiera cotizar Vaso Fernetero CRISIL al por mayor (desde 24 unidades). Cantidad: ",
     highlight: true,
   },
   {
     id: "logo",
-    label: "Pedido personalizado con tu logo",
-    price: 80,
+    label: "Personalizado con tu logo",
     range: "Desde 25 unidades",
     note: "Pedido para entrega antes de Halloween",
     message: "Hola, quisiera cotizar Vaso Fernetero CRISIL personalizado con el logo de mi empresa, para entrega antes de Halloween (desde 25 unidades). Empresa: ",
@@ -85,7 +79,7 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
           <p className="mb-3 text-xs font-bold uppercase text-primary">Llega a Santa Cruz · {ARRIVAL}</p>
           <h2 className="display text-5xl leading-none md:text-6xl">Vaso Fernetero CRISIL</h2>
           <p className="mt-5 max-w-xl text-muted-foreground">
-            Vidrio auténtico soplado con pasión en Bolivia, en su caja de regalo. Stock limitado de {STOCK_TOTAL} unidades: reserva el tuyo. Mientras más unidades, menor el precio por unidad.
+            Vidrio auténtico soplado con pasión en Bolivia, en su caja de regalo. Stock limitado de {STOCK_TOTAL} unidades: reserva el tuyo. Mientras más unidades, mejor precio por unidad.
           </p>
 
           <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-foreground/80">
@@ -101,14 +95,10 @@ export function FernetStock({ whatsapp }: { whatsapp: string }) {
                 className={`flex flex-col border p-5 ${t.highlight ? "border-primary bg-card" : "border-border bg-card"}`}
               >
                 <p className="text-xs font-bold uppercase text-primary">{t.label}</p>
-                <p className="display mt-3 text-5xl leading-none">
-                  {t.price} <span className="text-xl">Bs</span>
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">precio por unidad</p>
-                <p className="mt-4 text-sm font-semibold">{t.range}</p>
-                <p className="mt-1 flex-1 text-xs leading-5 text-muted-foreground">{t.note}</p>
+                <p className="display mt-3 text-3xl leading-tight">{t.range}</p>
+                <p className="mt-3 flex-1 text-xs leading-5 text-muted-foreground">{t.note}</p>
                 <Button variant={t.highlight ? "default" : "outline"} className="mt-5 w-full" onClick={() => open(t.message)}>
-                  {t.id === "logo" ? "Cotizar" : "Reservar"} <ArrowRight size={14} />
+                  {t.id === "unidad" ? "Reservar" : "Cotizar"} <ArrowRight size={14} />
                 </Button>
               </article>
             ))}

@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
 import { FernetStock } from "@/components/FernetStock";
+import { HalloweenPromo } from "@/components/HalloweenPromo";
+import { AnnouncementCarousel } from "@/components/AnnouncementCarousel";
 import { categories, products, packagingImage, packagingProducts, type Product } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
@@ -76,7 +78,11 @@ function Index() {
         </div>
       </section>
 
+      <AnnouncementCarousel />
+
       <FernetStock whatsapp={WHATSAPP_NUMBER} />
+
+      <HalloweenPromo whatsapp={WHATSAPP_NUMBER} />
 
       <ProcessScroll />
 
