@@ -2,7 +2,7 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
-## 2026-10-22 (4) (rama animaciones, pendiente de aprobar)
+## 2026-10-22 (4) (publicado en main el 22/10)
 - **Animaciones al hacer scroll:** las secciones aparecen suavemente al llegar a ellas (respeta "reducir movimiento" del celular o computadora).
 - **"¿Qué estás buscando crear?":** las dos tarjetas aparecen con efecto pop, una después de la otra. Botón "Ahora no, seguir viendo" que pliega la sección y lleva a "Así creamos tu proyecto".
 - **"Así creamos tu proyecto":** misma animación, más fluida (transiciones más largas y suaves).
