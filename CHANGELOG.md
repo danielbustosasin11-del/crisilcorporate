@@ -2,6 +2,9 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (5) (publicado en main)
+- Título de la portada de Halloween: "Vasos de fernet de vidrio soplado para Halloween" (antes "Ferneteras al por mayor…"). El mensaje de WhatsApp usa el mismo nombre.
+
 ## 2026-10-28 (4) (publicado en main)
 - Portada de Halloween animada: las arañas bajan colgando de su hilo, se mecen y mueven las patas; murciélagos cruzan volando.
 - Se quitaron las calabazas, y las arañas y murciélagos fijos de la foto (ahora son animados).

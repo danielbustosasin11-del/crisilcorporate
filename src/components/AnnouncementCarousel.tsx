@@ -27,13 +27,13 @@ type Slide = {
 };
 
 const PROMO_MSG = encodeURIComponent(
-  `Hola, quisiera aprovechar la promoción mayorista de Halloween en vasos ferneteros (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
+  `Hola, quisiera aprovechar la promoción mayorista de Halloween en vasos de fernet de vidrio soplado (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
 );
 
 const slides: Slide[] = [
   {
     tag: [`Halloween 2026 · Promo mayorista hasta el ${PROMO_UNTIL}`, `Halloween 2026 · Wholesale promo until ${PROMO_UNTIL_EN}`],
-    title: ["Ferneteras al por mayor para Halloween", "Fernet glasses wholesale for Halloween"],
+    title: ["Vasos de fernet de vidrio soplado para Halloween", "Hand-blown fernet glasses for Halloween"],
     text: [
       "Desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos de Halloween. Vidrio soplado a mano en Bolivia, con su caja.",
       "From 10 units at wholesale prices, for Halloween parties, events or gifts. Hand-blown glass made in Bolivia, boxed.",
