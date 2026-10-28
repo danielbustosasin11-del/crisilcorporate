@@ -1,7 +1,7 @@
 // Datos de contacto y ofertas activas. Para cambiar el número o las fechas, editar solo este archivo.
 
 // Número de WhatsApp de ventas (formato internacional, sin + ni espacios)
-export const WHATSAPP = "59169218942";
+export const WHATSAPP = "59175910264";
 
 // Halloween 2026: fecha límite para pedidos corporativos con diseño personalizado y fecha de entrega
 // (estas fechas también aparecen en el anuncio de la portada, en AnnouncementCarousel.tsx)

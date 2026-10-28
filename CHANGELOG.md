@@ -2,6 +2,9 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (publicado en main)
+- **Nuevo número de WhatsApp de ventas:** todos los botones de la página ahora abren WhatsApp con el +591 75910264 (antes iban al número personal). Se cambia en `src/lib/offers.ts`.
+
 ## 2026-10-22 (4) (publicado en main el 22/10)
 - **Animaciones al hacer scroll:** las secciones aparecen suavemente al llegar a ellas (respeta "reducir movimiento" del celular o computadora).
 - **"¿Qué estás buscando crear?":** las dos tarjetas aparecen con efecto pop, una después de la otra. Botón "Ahora no, seguir viendo" que pliega la sección y lleva a "Así creamos tu proyecto".
