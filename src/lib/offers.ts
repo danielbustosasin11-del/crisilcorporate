@@ -3,7 +3,6 @@
 // Número de WhatsApp de ventas (formato internacional, sin + ni espacios)
 export const WHATSAPP = "59175910264";
 
-// Halloween 2026: fecha límite para pedidos corporativos con diseño personalizado y fecha de entrega
-// (estas fechas también aparecen en el anuncio de la portada, en AnnouncementCarousel.tsx)
-export const HALLOWEEN_CUTOFF = "26 de octubre";
-export const HALLOWEEN_DELIVERY = "31 de octubre";
+// Promoción mayorista de ferneteras (anuncio de la portada, en AnnouncementCarousel.tsx)
+export const PROMO_UNTIL = "31 de octubre";
+export const PROMO_UNTIL_EN = "October 31";

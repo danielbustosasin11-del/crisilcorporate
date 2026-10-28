@@ -2,6 +2,9 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (2) (publicado en main)
+- **Portada: Halloween reemplazado por la promo mayorista de ferneteras.** "Ferneteras al por mayor, desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos", válida hasta el 31 de octubre. Imagen nueva con tres ferneteras, confeti y luces (versión vertical para celular). El botón "Pedir precio mayorista" abre WhatsApp al +591 75910264 con el mensaje listo. La fecha se cambia en `src/lib/offers.ts` (PROMO_UNTIL).
+
 ## 2026-10-28 (publicado en main)
 - **Nuevo número de WhatsApp de ventas:** todos los botones de la página ahora abren WhatsApp con el +591 75910264 (antes iban al número personal). Se cambia en `src/lib/offers.ts`.
 

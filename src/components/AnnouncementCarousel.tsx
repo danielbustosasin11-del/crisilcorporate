@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { WHATSAPP } from "@/lib/offers";
+import { PROMO_UNTIL, PROMO_UNTIL_EN, WHATSAPP } from "@/lib/offers";
 import { useLang } from "@/lib/i18n";
 
 // PORTADA: anuncios con fotos grandes que van rotando.
@@ -22,26 +22,26 @@ type Slide = {
   accent?: string;
 };
 
-const HALLOWEEN_MSG = encodeURIComponent(
-  "Hola, quisiera cotizar vasos con diseño personalizado de Halloween y el logo de mi empresa, para entrega el 31 de octubre. Empresa: ",
+const PROMO_MSG = encodeURIComponent(
+  `Hola, quisiera aprovechar la promoción mayorista de vasos ferneteros (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
 );
 
 const slides: Slide[] = [
   {
-    tag: ["Halloween 2026 · Pedidos hasta el 26 de octubre", "Halloween 2026 · Order by October 26"],
-    title: ["Halloween con el logo de tu empresa", "Halloween with your company logo"],
+    tag: [`Promo mayorista · Hasta el ${PROMO_UNTIL}`, `Wholesale promo · Until ${PROMO_UNTIL_EN}`],
+    title: ["Ferneteras al por mayor", "Fernet glasses wholesale"],
     text: [
-      "Aceptamos pedidos corporativos con diseños personalizados de Halloween hasta el 26 de octubre, para entrega el 31.",
-      "We take corporate orders with custom Halloween designs until October 26, delivered on the 31st.",
+      "Desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos. Vidrio soplado a mano en Bolivia.",
+      "From 10 units at wholesale prices, for parties, events or gifts. Hand-blown glass made in Bolivia.",
     ],
-    cta: ["Cotizar mi pedido de Halloween", "Quote my Halloween order"],
-    href: `https://wa.me/${WHATSAPP}?text=${HALLOWEEN_MSG}`,
-    image: "/images/halloween/halloween-hero.webp",
-    mobileImage: "/images/halloween/halloween-hero-movil.webp",
-    imageAlt: "Vaso de vidrio soplado con calabaza de Halloween 2026, telarañas y arañas sobre fondo negro",
+    cta: ["Pedir precio mayorista", "Get wholesale price"],
+    href: `https://wa.me/${WHATSAPP}?text=${PROMO_MSG}`,
+    image: "/images/promos/fernetero-fiestas.webp",
+    mobileImage: "/images/promos/fernetero-fiestas-movil.webp",
+    imageAlt: "Tres vasos ferneteros CRISIL de vidrio soplado con luces y confeti dorado",
     position: "object-top md:object-right",
     overlay: "dark",
-    accent: "#F28C28",
+    accent: "#F2BE50",
   },
   {
     tag: ["Impacto social", "Social impact"],
