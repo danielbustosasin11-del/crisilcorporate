@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROMO_UNTIL, PROMO_UNTIL_EN, WHATSAPP } from "@/lib/offers";
 import { useLang } from "@/lib/i18n";
+import { HalloweenFx } from "@/components/HalloweenFx";
 
 // PORTADA: anuncios con fotos grandes que van rotando.
 // Para agregar un anuncio nuevo, sumar un objeto a `slides` (texto en español y en inglés).
@@ -21,6 +22,8 @@ type Slide = {
   // "light": foto de fondo claro, texto oscuro.
   overlay?: "default" | "dark" | "light";
   accent?: string;
+  // "halloween": arañas y murciélagos animados encima de la foto
+  fx?: "halloween";
 };
 
 const PROMO_MSG = encodeURIComponent(
@@ -43,6 +46,7 @@ const slides: Slide[] = [
     position: "object-top md:object-right",
     overlay: "light",
     accent: "#F28C28",
+    fx: "halloween",
   },
   {
     tag: ["Impacto social", "Social impact"],
@@ -165,6 +169,7 @@ export function AnnouncementCarousel() {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
             )}
+            {s.fx === "halloween" && active && <HalloweenFx />}
             <div className={`absolute inset-x-0 top-0 h-36 bg-gradient-to-b to-transparent ${light ? "from-black/50" : "from-black/60"}`} />
             <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
           </div>

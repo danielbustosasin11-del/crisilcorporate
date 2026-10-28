@@ -2,6 +2,12 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (4) (publicado en main)
+- Portada de Halloween animada: las arañas bajan colgando de su hilo, se mecen y mueven las patas; murciélagos cruzan volando.
+- Se quitaron las calabazas, y las arañas y murciélagos fijos de la foto (ahora son animados).
+- Cada vez que vuelve a aparecer el anuncio, las arañas vuelven a bajar. Si la persona tiene "reducir movimiento", quedan quietas.
+- Archivos: `HalloweenFx.tsx` (nuevo), `AnnouncementCarousel.tsx`, `public/images/promos/fernetero-halloween*.webp`.
+
 ## 2026-10-28 (3) (publicado en main)
 - La promo mayorista de ferneteras vuelve a tener tema de Halloween: telarañas, arañas, murciélagos, calabazas y confeti, con la foto nueva del vaso y su caja FernetGlass (fondo claro, texto oscuro).
 - Mantiene: desde 10 unidades, precio mayorista hasta el 31 de octubre, para fiestas, eventos o regalos.
