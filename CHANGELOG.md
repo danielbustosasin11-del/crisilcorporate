@@ -2,6 +2,13 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (3) (publicado en main)
+- La promo mayorista de ferneteras vuelve a tener tema de Halloween: telarañas, arañas, murciélagos, calabazas y confeti, con la foto nueva del vaso y su caja FernetGlass (fondo claro, texto oscuro).
+- Mantiene: desde 10 unidades, precio mayorista hasta el 31 de octubre, para fiestas, eventos o regalos.
+- La foto nueva también es ahora la foto principal del "Vaso Fernetero" en el catálogo.
+- Se borraron las imágenes anteriores de la promo (`promos/fernetero-fiestas*`).
+- Archivos: `AnnouncementCarousel.tsx`, `public/images/promos/fernetero-halloween*.webp`, `public/images/productos/fernetero.webp`.
+
 ## 2026-10-28 (2) (publicado en main)
 - **Portada: Halloween reemplazado por la promo mayorista de ferneteras.** "Ferneteras al por mayor, desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos", válida hasta el 31 de octubre. Imagen nueva con tres ferneteras, confeti y luces (versión vertical para celular). El botón "Pedir precio mayorista" abre WhatsApp al +591 75910264 con el mensaje listo. La fecha se cambia en `src/lib/offers.ts` (PROMO_UNTIL).
 

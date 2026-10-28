@@ -17,31 +17,32 @@ type Slide = {
   mobileImage?: string;
   imageAlt: string;
   position?: string;
-  // "dark": la foto ya es oscura, se usa un degradado suave solo detrás del texto
-  overlay?: "default" | "dark";
+  // "dark": la foto ya es oscura, degradado suave solo detrás del texto.
+  // "light": foto de fondo claro, texto oscuro.
+  overlay?: "default" | "dark" | "light";
   accent?: string;
 };
 
 const PROMO_MSG = encodeURIComponent(
-  `Hola, quisiera aprovechar la promoción mayorista de vasos ferneteros (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
+  `Hola, quisiera aprovechar la promoción mayorista de Halloween en vasos ferneteros (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
 );
 
 const slides: Slide[] = [
   {
-    tag: [`Promo mayorista · Hasta el ${PROMO_UNTIL}`, `Wholesale promo · Until ${PROMO_UNTIL_EN}`],
-    title: ["Ferneteras al por mayor", "Fernet glasses wholesale"],
+    tag: [`Halloween 2026 · Promo mayorista hasta el ${PROMO_UNTIL}`, `Halloween 2026 · Wholesale promo until ${PROMO_UNTIL_EN}`],
+    title: ["Ferneteras al por mayor para Halloween", "Fernet glasses wholesale for Halloween"],
     text: [
-      "Desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos. Vidrio soplado a mano en Bolivia.",
-      "From 10 units at wholesale prices, for parties, events or gifts. Hand-blown glass made in Bolivia.",
+      "Desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos de Halloween. Vidrio soplado a mano en Bolivia, con su caja.",
+      "From 10 units at wholesale prices, for Halloween parties, events or gifts. Hand-blown glass made in Bolivia, boxed.",
     ],
     cta: ["Pedir precio mayorista", "Get wholesale price"],
     href: `https://wa.me/${WHATSAPP}?text=${PROMO_MSG}`,
-    image: "/images/promos/fernetero-fiestas.webp",
-    mobileImage: "/images/promos/fernetero-fiestas-movil.webp",
-    imageAlt: "Tres vasos ferneteros CRISIL de vidrio soplado con luces y confeti dorado",
+    image: "/images/promos/fernetero-halloween.webp",
+    mobileImage: "/images/promos/fernetero-halloween-movil.webp",
+    imageAlt: "Vaso fernetero CRISIL con su caja FernetGlass, telarañas, murciélagos, calabazas y confeti de Halloween",
     position: "object-top md:object-right",
-    overlay: "dark",
-    accent: "#F2BE50",
+    overlay: "light",
+    accent: "#F28C28",
   },
   {
     tag: ["Impacto social", "Social impact"],
@@ -92,6 +93,7 @@ export function AnnouncementCarousel() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const [touchX, setTouchX] = useState<number | null>(null);
+  const lightNow = slides[i]?.overlay === "light";
   const go = (n: number) => setI((n + slides.length) % slides.length);
 
   useEffect(() => {
@@ -125,16 +127,17 @@ export function AnnouncementCarousel() {
     >
       {slides.map((s, n) => {
         const active = n === i;
+        const light = s.overlay === "light";
         const content = (
           <div className="max-w-2xl">
             <p className="mb-4 inline-block px-3 py-1 text-[11px] font-bold uppercase" style={{ background: s.accent ?? "var(--secondary)", color: s.accent ? "#141414" : "var(--primary)" }}>{s.tag[L]}</p>
-            <h1 className="display text-5xl leading-[.95] sm:text-6xl lg:text-7xl">{s.title[L]}</h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-primary-foreground/85 md:text-lg">{s.text[L]}</p>
+            <h1 className={`display text-5xl leading-[.95] sm:text-6xl lg:text-7xl ${light ? "text-[#1a1a1a]" : ""}`}>{s.title[L]}</h1>
+            <p className={`mt-5 max-w-xl text-base leading-7 md:text-lg ${light ? "text-[#2b2b2b]" : "text-primary-foreground/85"}`}>{s.text[L]}</p>
             <a
               href={s.href}
               {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               tabIndex={active ? 0 : -1}
-              className="mt-8 inline-flex items-center gap-2 bg-primary-foreground px-6 py-4 text-xs font-bold uppercase text-primary hover:opacity-90"
+              className={`mt-8 inline-flex items-center gap-2 px-6 py-4 text-xs font-bold uppercase hover:opacity-90 ${light ? "bg-primary text-primary-foreground" : "bg-primary-foreground text-primary"}`}
             >
               {s.cta[L]} <ArrowRight size={15} />
             </a>
@@ -155,19 +158,21 @@ export function AnnouncementCarousel() {
                 className={`absolute inset-0 h-full w-full object-cover ${s.position ?? "object-center"} transition-transform duration-[7000ms] ease-out motion-reduce:transition-none ${active ? "scale-105" : "scale-100"}`}
               />
             </picture>
-            {s.overlay === "dark" ? (
+            {light ? (
+              <div className="absolute inset-0 bg-gradient-to-t from-[#ece8df] via-[#ece8df]/60 to-transparent md:bg-gradient-to-r md:from-[#ece8df]/90 md:via-[#ece8df]/40 md:to-transparent" />
+            ) : s.overlay === "dark" ? (
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent md:bg-gradient-to-r md:from-black/70 md:via-black/20 md:to-transparent" />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
             )}
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/60 to-transparent" />
+            <div className={`absolute inset-x-0 top-0 h-36 bg-gradient-to-b to-transparent ${light ? "from-black/50" : "from-black/60"}`} />
             <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
           </div>
         );
       })}
 
       <div className="absolute bottom-6 left-5 z-20 flex items-center gap-3 md:left-10">
-        <button type="button" onClick={() => go(i - 1)} aria-label={lang === "en" ? "Previous" : "Anterior"} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/40 bg-primary/30 backdrop-blur-sm hover:bg-primary/60">
+        <button type="button" onClick={() => go(i - 1)} aria-label={lang === "en" ? "Previous" : "Anterior"} className={`flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-sm ${lightNow ? "border-primary/50 bg-primary/10 text-primary hover:bg-primary/20" : "border-primary-foreground/40 bg-primary/30 hover:bg-primary/60"}`}>
           <ArrowLeft size={16} />
         </button>
         <div className="flex gap-1.5">
@@ -178,11 +183,11 @@ export function AnnouncementCarousel() {
               onClick={() => setI(n)}
               aria-label={`${lang === "en" ? "Slide" : "Anuncio"} ${n + 1}`}
               aria-current={n === i}
-              className={`h-2 rounded-full bg-white transition-all ${n === i ? "w-7" : "w-2 opacity-50"}`}
+              className={`h-2 rounded-full transition-all ${lightNow ? "bg-primary" : "bg-white"} ${n === i ? "w-7" : "w-2 opacity-50"}`}
             />
           ))}
         </div>
-        <button type="button" onClick={() => go(i + 1)} aria-label={lang === "en" ? "Next" : "Siguiente"} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/40 bg-primary/30 backdrop-blur-sm hover:bg-primary/60">
+        <button type="button" onClick={() => go(i + 1)} aria-label={lang === "en" ? "Next" : "Siguiente"} className={`flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-sm ${lightNow ? "border-primary/50 bg-primary/10 text-primary hover:bg-primary/20" : "border-primary-foreground/40 bg-primary/30 hover:bg-primary/60"}`}>
           <ArrowRight size={16} />
         </button>
       </div>
