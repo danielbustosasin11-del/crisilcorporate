@@ -12,7 +12,8 @@ import { CaseStudy } from "@/components/CaseStudy";
 import { VideoReel } from "@/components/VideoReel";
 import { InstagramPeek, INSTAGRAM_USER } from "@/components/InstagramPeek";
 import { categories, products, packagingProducts, type Product } from "@/lib/catalog";
-import { WHATSAPP } from "@/lib/offers";
+import { OFFERS, WHATSAPP } from "@/lib/offers";
+import { WholesaleHooks, WhatsAppFloat } from "@/components/WholesaleHooks";
 import { LangProvider, LanguageGate, LangToggle, translateSpec, useLang } from "@/lib/i18n";
 
 const logoAsset = { url: "/images/logo-crisil.png" };
@@ -31,8 +32,8 @@ export const Route = createFileRoute("/")({
   component: Page,
 });
 
-type FormState = { quantity: string; customization: string; packaging: string; date: string; name: string; company: string; role: string; whatsapp: string; email: string; occasion: string; notes: string };
-const initialForm: FormState = { quantity: "", customization: "", packaging: "", date: "", name: "", company: "", role: "", whatsapp: "", email: "", occasion: "", notes: "" };
+type FormState = { quantity: string; customization: string; date: string; name: string; company: string; role: string; whatsapp: string; email: string; occasion: string; notes: string };
+const initialForm: FormState = { quantity: "", customization: "", date: "", name: "", company: "", role: "", whatsapp: "", email: "", occasion: "", notes: "" };
 const WHATSAPP_NUMBER = WHATSAPP;
 
 // Envases: se muestran como una categoría más del mismo catálogo (foto vacío + foto con producto)
@@ -80,6 +81,7 @@ function Index() {
   const chooseProduct = (product: Product) => {
     setSelected(product);
     setStep(1);
+    setForm((f) => ({ ...f, quantity: "", customization: "", occasion: "" }));
     window.setTimeout(() => document.querySelector("#configurador")?.scrollIntoView({ behavior: "smooth" }), 30);
   };
 
@@ -131,7 +133,10 @@ function Index() {
       {/* 1. Portada: anuncios con fotos grandes */}
       <AnnouncementCarousel />
 
-      {/* 2. ¿Qué buscas crear? (tarjetas con efecto pop, se puede cerrar) */}
+      {/* 2. Ganchos para mayoristas: somos fabricantes, precios por mayor */}
+      <WholesaleHooks onCatalog={() => goTo("#regalos", "vasos")} />
+
+      {/* 3. ¿Qué buscas crear? (tarjetas con efecto pop, se puede cerrar) */}
       <PathChooser onGifts={() => goTo("#regalos", "vasos")} onPackaging={() => goTo("#regalos", "envases")} nextId="#proceso" />
 
       {/* 3. Así creamos tu proyecto */}
@@ -172,6 +177,8 @@ function Index() {
           </div>
         </div>
       </footer>
+
+      <WhatsAppFloat />
 
       {details && (
         <DetailModal
@@ -220,7 +227,9 @@ function GiftFlow({ category, setCategory, products, chooseProduct, viewDetails 
         <p className="mb-3 text-xs font-bold uppercase text-primary">{t("Catálogo 2026 · Vidrio reciclado soplado a mano", "2026 Catalog · Hand-blown recycled glass")}</p>
         <h2 className="display text-5xl leading-none md:text-6xl">{t("Elige tus piezas", "Choose your pieces")}</h2>
         <p className="mt-5 max-w-2xl text-muted-foreground">
-          {t("Regalos corporativos, cristalería y envases para tu marca, todo en un solo lugar. Todas las piezas se pueden personalizar con tu logo. Toca un producto para ver sus fotos y medidas.", "Corporate gifts, glassware and packaging for your brand, all in one place. Every piece can carry your logo. Tap a product to see its photos and measurements.")}
+          {category === "envases"
+            ? t("Botellas y frascos de vidrio para tu marca, por docena y desde 20 docenas. Con tapa o corcho, listos para tu etiqueta. Mientras más cantidad, mejor precio.", "Glass bottles and jars for your brand, sold by the dozen, from 20 dozen. With cap or cork, ready for your label. The more you order, the better the price.")
+            : t("Regalos corporativos desde 20 unidades, con tu logo en el vidrio y caja con tu marca. Toca un producto para ver fotos y medidas, y cotiza en un minuto.", "Corporate gifts from 20 units, with your logo on the glass and a branded box. Tap a product for photos and measurements, and get a quote in a minute.")}
         </p>
         </Reveal>
         <div className="mt-10 flex gap-2 overflow-x-auto pb-3">
@@ -324,7 +333,9 @@ function DetailModal({ product, close, choose }: { product: Product; close: () =
                 </p>
               </div>
             )}
-            <p className="mt-6 text-xs text-muted-foreground">{t("Personalizable con el logo de tu empresa · Hecho a mano con vidrio 100% reciclado", "Customizable with your company logo · Handmade from 100% recycled glass")}</p>
+            <p className="mt-6 text-xs text-muted-foreground">{product.category === "envases"
+                ? t("Venta por docena, desde 20 docenas · Con tapa o corcho, listo para tu etiqueta · Mientras más cantidad, mejor precio", "Sold by the dozen, from 20 dozen · With cap or cork, ready for your label · The more you order, the better the price")
+                : t("Desde 20 unidades · Logo grabado en el vidrio y caja con tu marca · Hecho a mano con vidrio 100% reciclado", "From 20 units · Logo engraved on the glass and branded box · Handmade from 100% recycled glass")}</p>
             <Button className="mt-6 w-full sm:w-auto" onClick={choose}>
               {t("Cotizar este modelo", "Quote this model")} <ArrowRight size={15} />
             </Button>
@@ -335,30 +346,35 @@ function DetailModal({ product, close, choose }: { product: Product; close: () =
   );
 }
 
-// Las opciones se guardan en español porque el mensaje de WhatsApp llega a ventas en español
-const QTY = ["25", "50", "100", "250", "500", "1000+", "Otra cantidad"];
-const CUSTOM: [string, string][] = [["Sí, con logo", "Yes, with logo"], ["Sí, con mensaje", "Yes, with a message"], ["Otra personalización", "Other customization"], ["No", "No"], ["Necesito asesoramiento", "I need advice"]];
-const PACK: [string, string][] = [["Estándar", "Standard"], ["Corporativo", "Corporate"], ["Premium", "Premium"], ["A medida / Necesito asesoramiento", "Custom / I need advice"]];
-const OCCASIONS: [string, string][] = [["Regalos para clientes", "Client gifts"], ["Regalos para colaboradores", "Team gifts"], ["Evento corporativo", "Corporate event"], ["Fin de año", "Year-end"], ["Aniversario", "Anniversary"], ["Lanzamiento de producto", "Product launch"], ["Regalos VIP", "VIP gifts"], ["Otro", "Other"]];
+// Las opciones se guardan en español porque el mensaje de WhatsApp llega a ventas en español.
+// Regalos y envases tienen preguntas distintas (ver OFFERS en lib/offers.ts).
+function offerFor(product: Product) {
+  return product.category === "envases" ? { key: "envases" as const, ...OFFERS.envases } : { key: "regalos" as const, ...OFFERS.regalos };
+}
 
 function Configurator({ product, step, setStep, form, update }: { product: Product; step: number; setStep: (s: number) => void; form: FormState; update: (k: keyof FormState, v: string) => void }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  const L = lang === "en" ? 1 : 0;
   const pt = useProductText();
-  const progress: [string, string][] = [["Cantidad", "Quantity"], ["Personalización", "Customization"], ["Empaque", "Packaging"], ["Proyecto", "Project"], ["Propuesta", "Proposal"]];
-  const canNext = step === 1 ? Boolean(form.quantity) : step === 2 ? Boolean(form.customization) : step === 3 ? Boolean(form.packaging) : step === 4 ? Boolean(form.date && form.name && form.company && form.whatsapp) : true;
-  const message = `Hola, quisiera solicitar una propuesta de CRISIL.\n\nProducto: ${product.name}${product.code ? ` (${product.code})` : ""}\nCantidad: ${form.quantity} unidades\nPersonalización: ${form.customization}\nEmpaque: ${form.packaging}\nOcasión: ${form.occasion || "Por definir"}\nFecha requerida: ${form.date}\n\nEmpresa: ${form.company}\nNombre: ${form.name}\n\nQuisiera recibir una propuesta.`;
+  const o = offerFor(product);
+  const envases = o.key === "envases";
+  const unitEs = o.unit[0];
+  const progress: [string, string][] = [["Cantidad", "Quantity"], ["Personalización", "Customization"], [envases ? "Tu producto" : "Ocasión", envases ? "Your product" : "Occasion"], ["Contacto", "Contact"], ["Resumen", "Summary"]];
+  const canNext = step === 1 ? Boolean(form.quantity) : step === 2 ? Boolean(form.customization) : step === 3 ? Boolean(form.occasion) : step === 4 ? Boolean(form.name && form.whatsapp) : true;
+  const message = `Hola, quisiera una cotización por mayor de CRISIL (${envases ? "envases para mi marca" : "regalo corporativo"}).\n\nProducto: ${product.name}${product.code ? ` (${product.code})` : ""}\nCantidad: ${form.quantity} ${unitEs}\nPersonalización: ${form.customization}\n${envases ? "Lo usaré para" : "Ocasión"}: ${form.occasion}\nPara cuándo: ${form.date || "Sin fecha fija"}\n\nNombre: ${form.name}${form.company ? `\n${envases ? "Marca/Empresa" : "Empresa"}: ${form.company}` : ""}${form.notes ? `\nNotas: ${form.notes}` : ""}`;
   const send = () => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   };
+  const qtyOptions: [string, string][] = [...o.quantities.map((q) => [q, q] as [string, string]), ["Más / otra cantidad", "More / other amount"]];
   return (
     <section id="configurador" className="scroll-mt-4 bg-muted px-5 py-20 md:px-10 md:py-28">
       <div className="mx-auto max-w-5xl">
         <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row">
           <div>
             <p className="text-xs font-bold uppercase text-primary">
-              {t("Tu proyecto", "Your project")} · {pt.name(product)}
+              {envases ? t("Envases para tu marca", "Packaging for your brand") : t("Regalo corporativo", "Corporate gift")} · {pt.name(product)}
             </p>
-            <h2 className="display mt-2 text-5xl">{t("Configuremos tu pedido", "Let's set up your order")}</h2>
+            <h2 className="display mt-2 text-5xl">{t("Cotiza en 1 minuto", "Get a quote in 1 minute")}</h2>
           </div>
           <span className="self-start border border-border bg-card px-4 py-2 text-xs font-semibold">
             {t("Paso", "Step")} {step} {t("de", "of")} 5
@@ -373,18 +389,30 @@ function Configurator({ product, step, setStep, form, update }: { product: Produ
           ))}
         </div>
         <div className="min-h-[430px] bg-card p-6 md:p-10">
-          {step === 1 && <ChoiceStep title={t("¿Cuántas unidades necesitas?", "How many units do you need?")} options={QTY.map((q) => [q, q === "Otra cantidad" ? "Other amount" : q])} value={form.quantity} onChange={(v) => update("quantity", v)} />}
-          {step === 2 && <ChoiceStep title={t("¿Quieres personalizar el producto?", "Would you like to customize it?")} options={CUSTOM} value={form.customization} onChange={(v) => update("customization", v)} />}
-          {step === 3 && (
+          {step === 1 && (
             <>
-              <ChoiceStep title={t("¿Cómo quieres presentarlo?", "How would you like it presented?")} options={PACK} value={form.packaging} onChange={(v) => update("packaging", v)} />
-              <p className="mt-8 border-l-2 border-secondary pl-4 text-xs leading-5 text-muted-foreground">
-                {t("Los ejemplos de empaque son referenciales. La disponibilidad, materiales, dimensiones y precio dependen del producto, cantidad y proyecto.", "Packaging examples are for reference. Availability, materials, dimensions and price depend on the product, quantity and project.")}
-              </p>
+              <ChoiceStep
+                title={envases ? t("¿Cuántas docenas necesitas?", "How many dozen do you need?") : t("¿Cuántas unidades necesitas?", "How many units do you need?")}
+                options={qtyOptions.map(([es, en]) => [es, en])}
+                value={form.quantity}
+                onChange={(v) => update("quantity", v)}
+                suffix={o.unit[L]}
+              />
+              <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2">
+                <p className="border-l-2 border-primary pl-4 text-muted-foreground">
+                  <strong className="text-foreground">{t("Pedido mínimo:", "Minimum order:")}</strong> {o.min} {o.unit[L]}.
+                  {envases ? t(" Vendemos por docena (12 unidades).", " We sell by the dozen (12 units).") : ""}
+                </p>
+                <p className="border-l-2 border-secondary pl-4 text-muted-foreground">
+                  <strong className="text-foreground">{t("Mientras más pides, más ahorras.", "The more you order, the more you save.")}</strong> {t("Precio directo de fábrica, sin intermediarios.", "Factory-direct price, no middlemen.")}
+                </p>
+              </div>
             </>
           )}
-          {step === 4 && <ProjectFields form={form} update={update} />}
-          {step === 5 && <Summary product={product} form={form} />}
+          {step === 2 && <ChoiceStep title={envases ? t("¿Cómo lo quieres?", "How would you like it?") : t("¿Cómo lo personalizamos?", "How should we customize it?")} options={o.custom} value={form.customization} onChange={(v) => update("customization", v)} />}
+          {step === 3 && <ChoiceStep title={envases ? t("¿Qué vas a envasar?", "What will you bottle?") : t("¿Para qué ocasión?", "What's the occasion?")} options={o.use} value={form.occasion} onChange={(v) => update("occasion", v)} />}
+          {step === 4 && <ProjectFields form={form} update={update} envases={envases} />}
+          {step === 5 && <Summary product={product} form={form} unit={o.unit[L]} envases={envases} />}
         </div>
         <div className="mt-5 flex justify-between">
           <Button variant="outline" disabled={step === 1} onClick={() => setStep(step - 1)}>
@@ -405,7 +433,7 @@ function Configurator({ product, step, setStep, form, update }: { product: Produ
   );
 }
 
-function ChoiceStep({ title, options, value, onChange }: { title: string; options: [string, string][]; value: string; onChange: (v: string) => void }) {
+function ChoiceStep({ title, options, value, onChange, suffix }: { title: string; options: [string, string][]; value: string; onChange: (v: string) => void; suffix?: string | undefined }) {
   const { lang, t } = useLang();
   return (
     <div>
@@ -415,6 +443,7 @@ function ChoiceStep({ title, options, value, onChange }: { title: string; option
         {options.map(([es, en]) => (
           <Button key={es} variant={value === es ? "primary" : "outline"} className="min-h-16 justify-between text-left" onClick={() => onChange(es)}>
             {lang === "en" ? en : es}
+            {suffix && /^\d/.test(es) ? ` ${suffix}` : ""}
             {value === es ? <Check size={17} /> : <ArrowRight size={15} />}
           </Button>
         ))}
@@ -423,20 +452,18 @@ function ChoiceStep({ title, options, value, onChange }: { title: string; option
   );
 }
 
-function ProjectFields({ form, update }: { form: FormState; update: (k: keyof FormState, v: string) => void }) {
+function ProjectFields({ form, update, envases }: { form: FormState; update: (k: keyof FormState, v: string) => void; envases: boolean }) {
   const { lang, t } = useLang();
-  const fields: [keyof FormState, string, string, string][] = [
-    ["name", "Nombre", "Name", "text"],
-    ["company", "Empresa", "Company", "text"],
-    ["role", "Cargo", "Role", "text"],
-    ["whatsapp", "WhatsApp", "WhatsApp", "tel"],
-    ["email", "Correo electrónico", "Email", "email"],
-    ["date", "¿Cuándo lo necesitas?", "When do you need it?", "date"],
+  const fields: [keyof FormState, string, string, string, boolean][] = [
+    ["name", "Tu nombre", "Your name", "text", true],
+    ["whatsapp", "Tu WhatsApp", "Your WhatsApp", "tel", true],
+    ["company", envases ? "Marca o empresa (opcional)" : "Empresa (opcional)", envases ? "Brand or company (optional)" : "Company (optional)", "text", false],
+    ["date", "¿Para cuándo? (opcional)", "When do you need it? (optional)", "date", false],
   ];
   return (
     <div>
-      <p className="text-xs font-bold uppercase text-primary">{t("Datos de contacto", "Contact details")}</p>
-      <h3 className="display mt-3 text-4xl">{t("Cuéntanos sobre tu proyecto", "Tell us about your project")}</h3>
+      <p className="text-xs font-bold uppercase text-primary">{t("Último paso", "Last step")}</p>
+      <h3 className="display mt-3 text-4xl">{t("¿A quién le enviamos la cotización?", "Who should we send the quote to?")}</h3>
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {fields.map(([key, es, en, type]) => (
           <label key={key} className="text-xs font-bold uppercase text-muted-foreground">
@@ -444,46 +471,31 @@ function ProjectFields({ form, update }: { form: FormState; update: (k: keyof Fo
             <input type={type} value={form[key]} onChange={(e) => update(key, e.target.value)} className="mt-2 h-12 w-full border border-input bg-background px-4 text-base font-normal text-foreground outline-none focus:border-primary" />
           </label>
         ))}
-        <label className="text-xs font-bold uppercase text-muted-foreground">
-          {t("Ocasión", "Occasion")}
-          <div className="relative">
-            <select value={form.occasion} onChange={(e) => update("occasion", e.target.value)} className="mt-2 h-12 w-full appearance-none border border-input bg-background px-4 text-base font-normal text-foreground outline-none focus:border-primary">
-              <option value="">{t("Seleccionar", "Select")}</option>
-              {OCCASIONS.map(([es, en]) => (
-                <option key={es} value={es}>
-                  {lang === "en" ? en : es}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-4 top-5" size={16} />
-          </div>
-        </label>
-        <label className="text-xs font-bold uppercase text-muted-foreground">
-          {t("Notas adicionales", "Additional notes")}
-          <textarea value={form.notes} onChange={(e) => update("notes", e.target.value)} className="mt-2 min-h-28 w-full resize-none border border-input bg-background p-4 text-base font-normal text-foreground outline-none focus:border-primary" />
+        <label className="text-xs font-bold uppercase text-muted-foreground md:col-span-2">
+          {t("¿Algo más? (otros modelos, colores, medidas…)", "Anything else? (other models, colors, sizes…)")}
+          <textarea value={form.notes} onChange={(e) => update("notes", e.target.value)} className="mt-2 min-h-24 w-full resize-none border border-input bg-background p-4 text-base font-normal text-foreground outline-none focus:border-primary" />
         </label>
       </div>
+      <p className="mt-6 text-xs text-muted-foreground">{t("Producción a pedido en 2 a 4 semanas · Stock inmediato en modelos seleccionados · Envíos a todo Bolivia", "Made to order in 2–4 weeks · Immediate stock on selected models · Shipping across Bolivia")}</p>
     </div>
   );
 }
 
-function Summary({ product, form }: { product: Product; form: FormState }) {
+function Summary({ product, form, unit, envases }: { product: Product; form: FormState; unit: string; envases: boolean }) {
   const { t } = useLang();
   const pt = useProductText();
   const rows: [string, string][] = [
     [t("Producto", "Product"), pt.name(product)],
-    [t("Cantidad", "Quantity"), `${form.quantity} ${t("unidades", "units")}`],
+    [t("Cantidad", "Quantity"), `${form.quantity} ${unit}`],
     [t("Personalización", "Customization"), form.customization],
-    [t("Empaque", "Packaging"), form.packaging],
-    [t("Ocasión", "Occasion"), form.occasion || t("Por definir", "To be defined")],
-    [t("Fecha requerida", "Required date"), form.date],
-    [t("Empresa", "Company"), form.company],
-    [t("Contacto", "Contact"), form.name],
+    [envases ? t("Para envasar", "To bottle") : t("Ocasión", "Occasion"), form.occasion],
+    [t("Para cuándo", "When"), form.date || t("Sin fecha fija", "No fixed date")],
+    [t("Contacto", "Contact"), [form.name, form.company].filter(Boolean).join(" · ")],
   ];
   return (
     <div>
-      <p className="text-xs font-bold uppercase text-primary">{t("Tu proyecto", "Your project")}</p>
-      <h3 className="display mt-3 text-5xl">{t("Listo para solicitar tu propuesta", "Ready to request your proposal")}</h3>
+      <p className="text-xs font-bold uppercase text-primary">{t("Revisa y envía", "Review and send")}</p>
+      <h3 className="display mt-3 text-5xl">{t("Te respondemos con tu precio por mayor", "We'll reply with your wholesale price")}</h3>
       <div className="mt-9 divide-y divide-border border-y border-border">
         {rows.map(([k, v]) => (
           <div key={k} className="grid grid-cols-[140px_1fr] gap-4 py-4 text-sm">

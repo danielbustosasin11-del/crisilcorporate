@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
+import { OFFERS } from "@/lib/offers";
 
 // "¿Qué estás buscando crear?": las dos tarjetas aparecen con efecto pop al llegar a la sección.
 // No es una ventana emergente: es parte de la página. Si la persona la cierra, se pliega y la página sigue.
 
 export function PathChooser({ onGifts, onPackaging, nextId }: { onGifts: () => void; onPackaging: () => void; nextId: string }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const [closed, setClosed] = useState(false);
+  const L = lang === "en" ? 1 : 0;
 
   const close = () => {
     setClosed(true);
@@ -45,25 +47,27 @@ export function PathChooser({ onGifts, onPackaging, nextId }: { onGifts: () => v
               index="01"
               title={t("Regalos corporativos", "Corporate gifts")}
               text={t(
-                "Vasos, copas, jarras y sets con tu logo, en caja de regalo, para clientes, colaboradores o fechas especiales. Como los que entregamos a médicos de todo el país para Laboratorios COFAR.",
-                "Glasses, goblets, pitchers and sets with your logo, in a gift box, for clients, staff or special dates. Like the ones we delivered to doctors nationwide for COFAR Laboratories.",
+                "Para empresas que quieren regalar a sus clientes o equipo: vasos, copas, jarras y sets con su logo y en caja con su marca. Como los que hicimos para Laboratorios COFAR.",
+                "For companies gifting clients or staff: glasses, goblets, pitchers and sets with their logo, in a branded box. Like the ones we made for COFAR Laboratories.",
               )}
               image="/images/cofar/entrega.webp"
               imageClassName="object-[50%_70%]"
-              action={t("Ver regalos corporativos", "See corporate gifts")}
+              points={[OFFERS.regalos.minLabel[L], t("Logo grabado en el vidrio", "Logo engraved on the glass"), t("Caja de regalo con tu marca", "Gift box with your brand"), t("Listo en 2 a 4 semanas", "Ready in 2 to 4 weeks")]}
+              action={t("Elegir mi regalo", "Choose my gift")}
               onClick={onGifts}
             />
           </Reveal>
           <Reveal variant="pop" delay={350}>
             <Card
               index="02"
-              title={t("Vidrio para tu marca", "Glass for your brand")}
+              title={t("Envases para tu marca", "Packaging for your brand")}
               text={t(
-                "Tu proveedor de botellas y frascos de vidrio para marcas de alimentos, bebidas, cosmética y restaurantes. Marcas como Del Valle ya llegan a la góndola en nuestros envases.",
-                "Your supplier of glass bottles and jars for food, beverage and cosmetics brands, and restaurants. Brands like Del Valle already reach store shelves in our packaging.",
+                "Para emprendedores y marcas que envasan bebidas, salsas, miel, licores o cosmética: botellas y frascos de vidrio con tapa, listos para tu etiqueta. Del Valle ya llega a la góndola en nuestros envases.",
+                "For entrepreneurs and brands bottling drinks, sauces, honey, spirits or cosmetics: glass bottles and jars with caps, ready for your label. Del Valle already reaches store shelves in our packaging.",
               )}
               image="/images/marcas/del-valle-gondola.webp"
               imageClassName="object-center"
+              points={[OFFERS.envases.minLabel[L] + t(" · venta por docena", " · sold by the dozen"), t("Tapas y corchos", "Caps and corks"), t("Con tu etiqueta", "With your label"), t("Stock estable para volver a pedir", "Steady stock for reorders")]}
               action={t("Ver botellas y frascos", "See bottles and jars")}
               onClick={onPackaging}
             />
@@ -74,7 +78,7 @@ export function PathChooser({ onGifts, onPackaging, nextId }: { onGifts: () => v
   );
 }
 
-function Card({ index, title, text, action, image, imageClassName, onClick }: { index: string; title: string; text: string; action: string; image: string; imageClassName: string; onClick: () => void }) {
+function Card({ index, title, text, points, action, image, imageClassName, onClick }: { index: string; title: string; text: string; points: string[]; action: string; image: string; imageClassName: string; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -87,6 +91,13 @@ function Card({ index, title, text, action, image, imageClassName, onClick }: { 
       </div>
       <h3 className="display text-3xl sm:text-4xl">{title}</h3>
       <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/70">{text}</p>
+      <ul className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
+        {points.map((p) => (
+          <li key={p} className="flex items-start gap-2">
+            <Check size={15} className="mt-0.5 shrink-0 text-secondary" /> {p}
+          </li>
+        ))}
+      </ul>
       <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">
         {action}
         <ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1" />

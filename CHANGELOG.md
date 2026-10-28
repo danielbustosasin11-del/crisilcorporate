@@ -2,6 +2,14 @@
 
 Registro de cada cambio y arreglo. Lo más reciente arriba.
 
+## 2026-10-28 (6) (rama `ofertas-mayoristas`, en revisión)
+- Nueva sección después de la portada: "¿No encuentras proveedor directo de cristalería en Santa Cruz?" con 4 ganchos (somos fabricantes, venta por mayor, stock estable, más cantidad = mejor precio), plazos y botón a WhatsApp.
+- Botón flotante de WhatsApp con el mensaje "Precios directo de fábrica" (se esconde mientras se llena el formulario).
+- Tarjetas "¿Qué estás buscando crear?": textos más claros y condiciones visibles. "Vidrio para tu marca" pasa a llamarse "Envases para tu marca", pensado para emprendedores.
+- Formulario de cotización distinto según la línea: regalos (unidades, desde 20; logo/caja; ocasión) y envases (docenas, desde 20; tapa/corcho/etiqueta; qué vas a envasar). Solo pide nombre y WhatsApp como obligatorios.
+- Ofertas estándar (mínimos, plazos, opciones) centralizadas en `src/lib/offers.ts`.
+- Archivos: `WholesaleHooks.tsx` (nuevo), `PathChooser.tsx`, `routes/index.tsx`, `lib/offers.ts`.
+
 ## 2026-10-28 (5) (publicado en main)
 - Título de la portada de Halloween: "Vasos de fernet de vidrio soplado para Halloween" (antes "Ferneteras al por mayor…"). El mensaje de WhatsApp usa el mismo nombre.
 
