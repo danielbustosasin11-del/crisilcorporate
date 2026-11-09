@@ -23,7 +23,11 @@ type Slide = {
   overlay?: "default" | "dark" | "light";
   accent?: string;
   // "navidad": nieve, esferas colgantes y destellos interactivos encima de la foto
-  fx?: "navidad";
+  fx?: "navidad" | "navidad-trineo";
+  // segundos que se queda este anuncio (por defecto 7)
+  seconds?: number;
+  // lista corta de puntos que se muestran debajo del texto
+  bullets?: [string, string][];
 };
 
 const XMAS_MSG = encodeURIComponent(
@@ -33,13 +37,17 @@ const WHOLESALE_MSG = encodeURIComponent(
   `Hola, quisiera el precio de fábrica para mayoristas de noviembre (válido hasta el ${PROMO_UNTIL}). Producto y cantidad: `,
 );
 
+const KIT_MSG = encodeURIComponent(
+  `Hola, quisiera armar un kit de regalo corporativo con mi logo (dulceros con chocolates, decanters, floreros, frascos o vasos). Empresa y cantidad: `,
+);
+
 const slides: Slide[] = [
   {
     tag: [`Fin de año 2026 · Reservá hasta el ${PROMO_UNTIL}`, `Year-end 2026 · Book by ${PROMO_UNTIL_EN}`],
     title: ["Tu logo en el vaso, tu marca en la caja", "Your logo on the glass, your brand on the box"],
     text: [
-      "El regalo de fin de año para tu equipo y tus clientes: vasos soplados a mano en Bolivia con el logo de tu empresa, en una caja también personalizada. Desde 25 unidades, a tiempo para diciembre.",
-      "The year-end gift for your team and clients: glasses hand-blown in Bolivia with your company logo, in a box customized too. From 25 units, in time for December.",
+      "El regalo de fin de año para tu equipo y tus clientes: vasos soplados a mano en Bolivia, personalizados con tu empresa.",
+      "The year-end gift for your team and clients: glasses hand-blown in Bolivia, customized for your company.",
     ],
     cta: ["Cotizar regalo corporativo", "Quote corporate gift"],
     href: `https://wa.me/${WHATSAPP}?text=${XMAS_MSG}`,
@@ -49,7 +57,38 @@ const slides: Slide[] = [
     position: "object-top md:object-right",
     overlay: "light",
     accent: "#D4AF37",
+    fx: "navidad-trineo",
+    seconds: 14,
+    bullets: [
+      ["Logo grabado o arenado en el vaso", "Logo engraved or sandblasted on the glass"],
+      ["Caja de regalo con tu marca", "Gift box with your brand"],
+      ["Desde 25 unidades", "From 25 units"],
+      ["Entrega a tiempo para diciembre", "Delivered in time for December"],
+    ],
+  },
+  {
+    tag: [`Kits de regalo corporativo · Hasta el ${PROMO_UNTIL}`, `Corporate gift kits · Until ${PROMO_UNTIL_EN}`],
+    title: ["Regalos con tu logo para clientes y empleados", "Gifts with your logo for clients and employees"],
+    text: [
+      "Ideales para reconocer a tus empleados destacados y agradecer a tus clientes. Todo de vidrio soplado y con el logo de tu empresa.",
+      "Perfect to recognize top employees and thank your clients. All hand-blown glass, with your company logo.",
+    ],
+    cta: ["Armar mi kit de regalo", "Build my gift kit"],
+    href: `https://wa.me/${WHATSAPP}?text=${KIT_MSG}`,
+    image: "/images/navidad/kit-corporativo.webp",
+    mobileImage: "/images/navidad/kit-corporativo-movil.webp",
+    imageAlt: "Productos CRISIL para regalo corporativo con espacio para logo: dulcero con chocolates, decanter, florero, vaso, frasco y mate",
+    position: "object-top md:object-right",
+    overlay: "light",
+    accent: "#D4AF37",
     fx: "navidad",
+    seconds: 10,
+    bullets: [
+      ["Dulcero con chocolates", "Candy jar with chocolates"],
+      ["Decanter y vasos", "Decanter and glasses"],
+      ["Floreros y frascos", "Vases and jars"],
+      ["Tu logo en cada pieza", "Your logo on every piece"],
+    ],
   },
   {
     tag: [`Solo noviembre · Hasta el ${PROMO_UNTIL}`, `November only · Until ${PROMO_UNTIL_EN}`],
@@ -126,9 +165,10 @@ export function AnnouncementCarousel() {
       reduce = false;
     }
     if (paused || reduce) return;
-    const t = window.setInterval(() => setI((c) => (c + 1) % slides.length), INTERVAL_MS);
-    return () => window.clearInterval(t);
-  }, [paused]);
+    const ms = (slides[i]?.seconds ?? INTERVAL_MS / 1000) * 1000;
+    const t = window.setTimeout(() => setI((c) => (c + 1) % slides.length), ms);
+    return () => window.clearTimeout(t);
+  }, [paused, i]);
 
   return (
     <section
@@ -155,6 +195,16 @@ export function AnnouncementCarousel() {
             <p className="mb-4 inline-block px-3 py-1 text-[11px] font-bold uppercase" style={{ background: s.accent ?? "var(--secondary)", color: s.accent ? "#141414" : "var(--primary)" }}>{s.tag[L]}</p>
             <h1 className={`display text-5xl leading-[.95] sm:text-6xl lg:text-7xl ${light ? "text-[#1a1a1a]" : ""}`}>{s.title[L]}</h1>
             <p className={`mt-5 max-w-xl text-base leading-7 md:text-lg ${light ? "text-[#2b2b2b]" : "text-primary-foreground/85"}`}>{s.text[L]}</p>
+            {s.bullets && (
+              <ul className={`mt-5 hidden max-w-xl grid-cols-1 gap-2 md:grid text-sm font-semibold sm:grid-cols-2 ${light ? "text-[#1a1a1a]" : ""}`}>
+                {s.bullets.map((b) => (
+                  <li key={b[0]} className="flex items-center gap-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px]" style={{ background: s.accent ?? "var(--secondary)", color: "#141414" }}>✓</span>
+                    {b[L]}
+                  </li>
+                ))}
+              </ul>
+            )}
             <a
               href={s.href}
               {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -187,7 +237,7 @@ export function AnnouncementCarousel() {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
             )}
-            {s.fx === "navidad" && active && <ChristmasFx />}
+            {s.fx?.startsWith("navidad") && active && <ChristmasFx sleigh={s.fx === "navidad-trineo"} />}
             <div className={`absolute inset-x-0 top-0 h-36 bg-gradient-to-b to-transparent ${light ? "from-black/50" : "from-black/60"}`} />
             <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
           </div>
