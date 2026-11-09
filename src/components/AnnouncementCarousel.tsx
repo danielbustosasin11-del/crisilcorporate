@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROMO_UNTIL, PROMO_UNTIL_EN, WHATSAPP } from "@/lib/offers";
 import { useLang } from "@/lib/i18n";
-import { HalloweenFx } from "@/components/HalloweenFx";
 
 // PORTADA: anuncios con fotos grandes que van rotando.
 // Para agregar un anuncio nuevo, sumar un objeto a `slides` (texto en español y en inglés).
@@ -26,27 +25,43 @@ type Slide = {
   fx?: "halloween";
 };
 
-const PROMO_MSG = encodeURIComponent(
-  `Hola, quisiera aprovechar la promoción mayorista de Halloween en vasos de fernet de vidrio soplado (desde 10 unidades, válida hasta el ${PROMO_UNTIL}). Cantidad: `,
+const XMAS_MSG = encodeURIComponent(
+  `Hola, quisiera cotizar regalos corporativos de fin de año con el logo de mi empresa (pedido mínimo 25 unidades). Empresa: `,
+);
+const WHOLESALE_MSG = encodeURIComponent(
+  `Hola, quisiera el precio de fábrica para mayoristas de noviembre (válido hasta el ${PROMO_UNTIL}). Producto y cantidad: `,
 );
 
 const slides: Slide[] = [
   {
-    tag: [`Halloween 2026 · Promo mayorista hasta el ${PROMO_UNTIL}`, `Halloween 2026 · Wholesale promo until ${PROMO_UNTIL_EN}`],
-    title: ["Vasos de fernet de vidrio soplado para Halloween", "Hand-blown fernet glasses for Halloween"],
+    tag: [`Fin de año 2026 · Reservá hasta el ${PROMO_UNTIL}`, `Year-end 2026 · Book by ${PROMO_UNTIL_EN}`],
+    title: ["Regalos de fin de año con el logo de tu empresa", "Year-end gifts with your company logo"],
     text: [
-      "Desde 10 unidades, con precio mayorista, para fiestas, eventos o regalos de Halloween. Vidrio soplado a mano en Bolivia, con su caja.",
-      "From 10 units at wholesale prices, for Halloween parties, events or gifts. Hand-blown glass made in Bolivia, boxed.",
+      "Vasos y copas soplados a mano en Bolivia, con tu logo y en caja de regalo. Pedí ahora y recibí a tiempo para diciembre. Desde 25 unidades.",
+      "Hand-blown glasses and goblets made in Bolivia, with your logo and in a gift box. Order now and get them in time for December. From 25 units.",
     ],
-    cta: ["Pedir precio mayorista", "Get wholesale price"],
-    href: `https://wa.me/${WHATSAPP}?text=${PROMO_MSG}`,
-    image: "/images/promos/fernetero-halloween.webp",
-    mobileImage: "/images/promos/fernetero-halloween-movil.webp",
-    imageAlt: "Vaso fernetero CRISIL con su caja FernetGlass, telarañas, murciélagos, calabazas y confeti de Halloween",
-    position: "object-top md:object-right",
-    overlay: "light",
-    accent: "#F28C28",
-    fx: "halloween",
+    cta: ["Cotizar regalo corporativo", "Quote corporate gift"],
+    href: `https://wa.me/${WHATSAPP}?text=${XMAS_MSG}`,
+    image: "/images/cofar/entrega.webp",
+    imageAlt: "Vasos CRISIL con logo en cajas de regalo blancas con moño dorado, listos para entregar",
+    position: "object-[50%_60%]",
+    overlay: "dark",
+    accent: "#D4AF37",
+  },
+  {
+    tag: [`Solo noviembre · Hasta el ${PROMO_UNTIL}`, `November only · Until ${PROMO_UNTIL_EN}`],
+    title: ["Precio de fábrica para mayoristas", "Factory prices for wholesalers"],
+    text: [
+      "Comprá directo a la fábrica: vasos, copas, jarras y frascos de vidrio reciclado, con stock y envíos a toda Bolivia. Más volumen, mejor precio.",
+      "Buy direct from the factory: recycled-glass tumblers, goblets, pitchers and jars, in stock and shipped across Bolivia. More volume, better price.",
+    ],
+    cta: ["Pedir precio de fábrica", "Get factory price"],
+    href: `https://wa.me/${WHATSAPP}?text=${WHOLESALE_MSG}`,
+    image: "/images/historia/brindis.webp",
+    imageAlt: "Dos copas de vidrio CRISIL brindando frente a las luces de la ciudad de noche",
+    position: "object-center",
+    overlay: "dark",
+    accent: "#D4AF37",
   },
   {
     tag: ["Impacto social", "Social impact"],
@@ -169,7 +184,6 @@ export function AnnouncementCarousel() {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
             )}
-            {s.fx === "halloween" && active && <HalloweenFx />}
             <div className={`absolute inset-x-0 top-0 h-36 bg-gradient-to-b to-transparent ${light ? "from-black/50" : "from-black/60"}`} />
             <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
           </div>

@@ -3,6 +3,7 @@
 // Número de WhatsApp de ventas (formato internacional, sin + ni espacios)
 export const WHATSAPP = "59175910264";
 
-// Promoción mayorista de ferneteras (anuncio de la portada, en AnnouncementCarousel.tsx)
-export const PROMO_UNTIL = "31 de octubre";
-export const PROMO_UNTIL_EN = "October 31";
+// Ofertas de noviembre (anuncios de la portada, en AnnouncementCarousel.tsx):
+// regalos corporativos de fin de año + precio de fábrica para mayoristas
+export const PROMO_UNTIL = "30 de noviembre";
+export const PROMO_UNTIL_EN = "November 30";
