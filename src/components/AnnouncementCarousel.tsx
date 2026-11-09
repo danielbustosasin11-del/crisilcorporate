@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROMO_UNTIL, PROMO_UNTIL_EN, WHATSAPP } from "@/lib/offers";
 import { useLang } from "@/lib/i18n";
+import { ChristmasFx } from "@/components/ChristmasFx";
 
 // PORTADA: anuncios con fotos grandes que van rotando.
 // Para agregar un anuncio nuevo, sumar un objeto a `slides` (texto en español y en inglés).
@@ -21,12 +22,12 @@ type Slide = {
   // "light": foto de fondo claro, texto oscuro.
   overlay?: "default" | "dark" | "light";
   accent?: string;
-  // "halloween": arañas y murciélagos animados encima de la foto
-  fx?: "halloween";
+  // "navidad": nieve, esferas colgantes y destellos interactivos encima de la foto
+  fx?: "navidad";
 };
 
 const XMAS_MSG = encodeURIComponent(
-  `Hola, quisiera cotizar regalos corporativos de fin de año con el logo de mi empresa (pedido mínimo 25 unidades). Empresa: `,
+  `Hola, quisiera cotizar regalos corporativos de fin de año con el logo de mi empresa en el vaso y en la caja (pedido mínimo 25 unidades). Empresa: `,
 );
 const WHOLESALE_MSG = encodeURIComponent(
   `Hola, quisiera el precio de fábrica para mayoristas de noviembre (válido hasta el ${PROMO_UNTIL}). Producto y cantidad: `,
@@ -35,18 +36,20 @@ const WHOLESALE_MSG = encodeURIComponent(
 const slides: Slide[] = [
   {
     tag: [`Fin de año 2026 · Reservá hasta el ${PROMO_UNTIL}`, `Year-end 2026 · Book by ${PROMO_UNTIL_EN}`],
-    title: ["Regalos de fin de año con el logo de tu empresa", "Year-end gifts with your company logo"],
+    title: ["Tu logo en el vaso, tu marca en la caja", "Your logo on the glass, your brand on the box"],
     text: [
-      "Vasos y copas soplados a mano en Bolivia, con tu logo y en caja de regalo. Pedí ahora y recibí a tiempo para diciembre. Desde 25 unidades.",
-      "Hand-blown glasses and goblets made in Bolivia, with your logo and in a gift box. Order now and get them in time for December. From 25 units.",
+      "El regalo de fin de año para tu equipo y tus clientes: vasos soplados a mano en Bolivia con el logo de tu empresa, en una caja también personalizada. Desde 25 unidades, a tiempo para diciembre.",
+      "The year-end gift for your team and clients: glasses hand-blown in Bolivia with your company logo, in a box customized too. From 25 units, in time for December.",
     ],
     cta: ["Cotizar regalo corporativo", "Quote corporate gift"],
     href: `https://wa.me/${WHATSAPP}?text=${XMAS_MSG}`,
-    image: "/images/cofar/entrega.webp",
-    imageAlt: "Vasos CRISIL con logo en cajas de regalo blancas con moño dorado, listos para entregar",
-    position: "object-[50%_60%]",
-    overlay: "dark",
+    image: "/images/navidad/fernetglass-logo.webp",
+    mobileImage: "/images/navidad/fernetglass-logo-movil.webp",
+    imageAlt: "Vaso FernetGlass de vidrio soplado junto a su caja de regalo, sobre fondo claro",
+    position: "object-top md:object-right",
+    overlay: "light",
     accent: "#D4AF37",
+    fx: "navidad",
   },
   {
     tag: [`Solo noviembre · Hasta el ${PROMO_UNTIL}`, `November only · Until ${PROMO_UNTIL_EN}`],
@@ -184,6 +187,7 @@ export function AnnouncementCarousel() {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/45 to-primary/25" />
             )}
+            {s.fx === "navidad" && active && <ChristmasFx />}
             <div className={`absolute inset-x-0 top-0 h-36 bg-gradient-to-b to-transparent ${light ? "from-black/50" : "from-black/60"}`} />
             <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-28 pt-28 md:px-10 md:pb-32">{content}</div>
           </div>
