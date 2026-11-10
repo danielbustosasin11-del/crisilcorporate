@@ -104,8 +104,11 @@ function Sleigh() {
           {/* Papá Noel */}
           <path d="M92,128 C90,112 96,100 108,98 C122,96 132,104 134,118 L136,128Z" />
           <circle cx="114" cy="92" r="9" />
-          <path d="M106,88 C108,74 124,72 128,82 C131,88 134,92 138,92 L136,96 C130,94 124,90 120,86Z" />
-          <circle cx="139" cy="94" r="3.5" />
+          {/* gorro: la punta y el pompón vuelan hacia atrás (izquierda) porque el trineo va hacia la derecha */}
+          <g className="sl-hat">
+            <path d="M123,89 C122,76 108,71 100,78 C94,83 90,84 84,82 L84,87 C92,90 100,89 106,87Z" />
+            <circle cx="82" cy="85" r="3.8" />
+          </g>
           <path d="M120,96 C126,100 128,106 124,110 C120,106 116,102 114,98Z" />
           <path d="M126,112 C136,112 146,120 152,146 L146,148 C140,126 134,120 126,120Z" />
           {/* caja del trineo */}
@@ -197,11 +200,13 @@ const css = `
 @keyframes sl-back-low{0%,100%{transform:rotate(-70deg)}50%{transform:rotate(-10deg)}}
 .sl-sled{animation:sl-sled 1.3s ease-in-out infinite alternate;transform-origin:100px 140px;}
 @keyframes sl-sled{from{transform:rotate(-3deg)}to{transform:rotate(3deg) translateY(3px)}}
+.sl-hat{transform-origin:114px 86px;animation:sl-hat .5s ease-in-out infinite alternate;}
+@keyframes sl-hat{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
 .sl-trail text{animation:sl-tw .8s ease-in-out infinite alternate;}
 @keyframes sl-tw{from{opacity:.15}to{opacity:1}}
 
 @media (prefers-reduced-motion: reduce){
-  .xfx-fall,.xfx-sway,.xfx-spin,.sl-fly,.sl-wave,.sl-bob,.sl-neck,.sl-up,.sl-low,.sl-sled,.sl-trail text{animation:none!important}
+  .xfx-fall,.xfx-sway,.xfx-spin,.sl-fly,.sl-wave,.sl-bob,.sl-neck,.sl-up,.sl-low,.sl-sled,.sl-hat,.sl-trail text{animation:none!important}
   .xfx-fall,.sl-fly{display:none}
 }
 `;

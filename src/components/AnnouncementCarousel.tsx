@@ -16,6 +16,8 @@ type Slide = {
   href: string;
   image: string;
   mobileImage?: string;
+  // Segunda foto en la que se "transforma" la primera (barrido dorado de izquierda a derecha)
+  morph?: { image: string; mobileImage?: string };
   imageAlt: string;
   position?: string;
   // "dark": la foto ya es oscura, degradado suave solo detrás del texto.
@@ -53,7 +55,8 @@ const slides: Slide[] = [
     href: `https://wa.me/${WHATSAPP}?text=${XMAS_MSG}`,
     image: "/images/navidad/fernetglass-logo.webp",
     mobileImage: "/images/navidad/fernetglass-logo-movil.webp",
-    imageAlt: "Vaso FernetGlass de vidrio soplado junto a su caja de regalo, sobre fondo claro",
+    morph: { image: "/images/navidad/fernetglass-regalo.webp", mobileImage: "/images/navidad/fernetglass-regalo-movil.webp" },
+    imageAlt: "Vaso FernetGlass de vidrio soplado junto a su caja; la caja se transforma en una caja blanca de regalo con el logo de tu empresa",
     position: "object-top md:object-right",
     overlay: "light",
     accent: "#D4AF37",
@@ -77,7 +80,7 @@ const slides: Slide[] = [
     href: `https://wa.me/${WHATSAPP}?text=${KIT_MSG}`,
     image: "/images/navidad/kit-corporativo.webp",
     mobileImage: "/images/navidad/kit-corporativo-movil.webp",
-    imageAlt: "Productos CRISIL para regalo corporativo con espacio para logo: dulcero con chocolates, decanter, florero, vaso, frasco y mate",
+    imageAlt: "Productos CRISIL para regalo corporativo con espacio para logo: vaso fernetero, dulcero con chocolates, decanter, florero en caja, set de bar, jarra, tarro y vasos de vino",
     position: "object-top md:object-right",
     overlay: "light",
     accent: "#D4AF37",
@@ -85,8 +88,8 @@ const slides: Slide[] = [
     seconds: 10,
     bullets: [
       ["Dulcero con chocolates", "Candy jar with chocolates"],
-      ["Decanter y vasos", "Decanter and glasses"],
-      ["Floreros y frascos", "Vases and jars"],
+      ["Decanters, jarras y sets de bar", "Decanters, pitchers and bar sets"],
+      ["Floreros en caja de regalo", "Vases in gift boxes"],
       ["Tu logo en cada pieza", "Your logo on every piece"],
     ],
   },
@@ -147,6 +150,18 @@ const slides: Slide[] = [
 ];
 
 const INTERVAL_MS = 7000;
+
+// Transformación de la caja: a los ~3 s un barrido dorado cruza la foto y revela la versión
+// "regalo corporativo" (caja blanca con logo y fondo navideño). Se repite cada 13 s.
+const morphCss = `
+.morph-img{animation:morph-wipe 13s ease-in-out infinite both;}
+@keyframes morph-wipe{0%,22%{clip-path:inset(0 100% 0 0);opacity:1}36%,93%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 0);opacity:0}}
+.morph-bar{position:absolute;top:0;bottom:0;left:0;width:90px;margin-left:-45px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,236,170,.0) 10%,rgba(255,226,140,.75) 48%,#fff 50%,rgba(255,226,140,.75) 52%,transparent);
+  filter:blur(3px);animation:morph-bar 13s ease-in-out infinite both;}
+@keyframes morph-bar{0%,22%{left:0;opacity:0}23%{opacity:1}35%{opacity:1}36%{left:100%;opacity:0}100%{left:100%;opacity:0}}
+@media (prefers-reduced-motion: reduce){.morph-img{animation:none}.morph-bar{display:none}}
+`;
 
 export function AnnouncementCarousel() {
   const { lang } = useLang();
@@ -227,9 +242,19 @@ export function AnnouncementCarousel() {
                 src={s.image}
                 alt={s.imageAlt}
                 loading={n === 0 ? "eager" : "lazy"}
-                className={`absolute inset-0 h-full w-full object-cover ${s.position ?? "object-center"} transition-transform duration-[7000ms] ease-out motion-reduce:transition-none ${active ? "scale-105" : "scale-100"}`}
+                className={`absolute inset-0 h-full w-full object-cover ${s.position ?? "object-center"} transition-transform duration-[7000ms] ease-out motion-reduce:transition-none ${active && !s.morph ? "scale-105" : "scale-100"}`}
               />
             </picture>
+            {s.morph && active && (
+              <>
+                <style>{morphCss}</style>
+                <picture>
+                  {s.morph.mobileImage && <source media="(max-width: 767px)" srcSet={s.morph.mobileImage} />}
+                  <img src={s.morph.image} alt="" aria-hidden className={`morph-img absolute inset-0 h-full w-full object-cover ${s.position ?? "object-center"}`} />
+                </picture>
+                <div className="morph-bar" aria-hidden />
+              </>
+            )}
             {light ? (
               <div className="absolute inset-0 bg-gradient-to-t from-[#ece8df] via-[#ece8df]/60 to-transparent md:bg-gradient-to-r md:from-[#ece8df]/90 md:via-[#ece8df]/40 md:to-transparent" />
             ) : s.overlay === "dark" ? (

@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, Send, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProcessScroll } from "@/components/ProcessScroll";
 import { TrackOrder } from "@/components/TrackOrder";
 import { AnnouncementCarousel } from "@/components/AnnouncementCarousel";
+import { QuickQuote, WhatsAppFab } from "@/components/QuickQuote";
+import { startTracking, track } from "@/lib/track";
 import { StorySection, GlassSteps } from "@/components/StorySection";
 import { PathChooser } from "@/components/PathChooser";
 import { Reveal } from "@/components/Reveal";
@@ -69,6 +71,7 @@ function Index() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState(initialForm);
   const [details, setDetails] = useState<Product | null>(null);
+  useEffect(() => startTracking(), []);
 
   const visibleProducts = useMemo(() => (category === "envases" ? activePackaging : products.filter((p) => p.active && p.category === category)), [category]);
   const update = (key: keyof FormState, value: string) => setForm((current) => ({ ...current, [key]: value }));
@@ -131,6 +134,9 @@ function Index() {
       {/* 1. Portada: anuncios con fotos grandes */}
       <AnnouncementCarousel />
 
+      {/* 1b. Cotización rápida: 3 toques y abre WhatsApp (también para pedir reunión) */}
+      <QuickQuote />
+
       {/* 2. ¿Qué buscas crear? (tarjetas con efecto pop, se puede cerrar) */}
       <PathChooser onGifts={() => goTo("#regalos", "vasos")} onPackaging={() => goTo("#regalos", "envases")} nextId="#proceso" />
 
@@ -172,6 +178,8 @@ function Index() {
           </div>
         </div>
       </footer>
+
+      <WhatsAppFab />
 
       {details && (
         <DetailModal
@@ -348,6 +356,7 @@ function Configurator({ product, step, setStep, form, update }: { product: Produ
   const canNext = step === 1 ? Boolean(form.quantity) : step === 2 ? Boolean(form.customization) : step === 3 ? Boolean(form.packaging) : step === 4 ? Boolean(form.date && form.name && form.company && form.whatsapp) : true;
   const message = `Hola, quisiera solicitar una propuesta de CRISIL.\n\nProducto: ${product.name}${product.code ? ` (${product.code})` : ""}\nCantidad: ${form.quantity} unidades\nPersonalización: ${form.customization}\nEmpaque: ${form.packaging}\nOcasión: ${form.occasion || "Por definir"}\nFecha requerida: ${form.date}\n\nEmpresa: ${form.company}\nNombre: ${form.name}\n\nQuisiera recibir una propuesta.`;
   const send = () => {
+    track("cotizacion_configurador", product.name, { cantidad: form.quantity, empresa: form.company.slice(0, 80) });
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   };
   return (
